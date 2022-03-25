@@ -1,0 +1,149 @@
+html {
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+html, body{ 
+    margin-left: 0;
+    margin-right: 0;
+}
+
+header, .navbar {
+    background-color: transparent;
+}
+
+header {
+    grid-area: header;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #282828;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+#header-text, #header-text-responsive{
+    margin: 0 10px 0 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 36px;
+    font-weight: 100;
+}
+
+#header-text-responsive {
+    display: none;
+}
+
+.nav-toggle {
+    display: none;
+}
+
+.nav-label {
+    display: none;
+}
+
+.nav-bars {
+    width: 40px;
+    height: 5px;
+    background-color: gainsboro;
+    border-radius: 2px;
+    margin: 6px 0;
+}
+
+.navbar {
+    background-color: #282828;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0 15px 0;
+    align-items: center;
+}
+
+.left-navbar {
+    padding-left: 5px ;
+}
+
+.right-navbar {
+    padding-right: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar a {
+    color: gainsboro;
+    text-decoration: none;
+    padding: 2px 8px 2px 8px;
+    text-align: center;
+}
+
+.navbar a:hover {
+    color: darkkhaki;
+}
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-top: 93.25px;
+    margin-bottom: 0;
+    background-color: #2f2f2f;
+    padding-top: 10px;
+    color: gainsboro;
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 
+    "header"
+    "main"
+    "footer";
+}
+
+main {
+    grid-area: main;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    margin: 0 7% 20px 7%;
+}
+
+.side {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0 7% 20px 7%;
+}
+
+footer {
+    grid-area: footer;
+    background-color: #282828;
+    width: 100%;
+    text-align: center;
+    color: gainsboro;
+
+}
+footer img {
+    width: 25px;
+}
+footer a {
+    padding: 5px;
+    filter: invert(45%) sepia(0%) saturate(4661%) hue-rotate(89deg) brightness(88%) contrast(92%);
+    text-decoration: none;
+}
+footer h3 {
+    padding: 0;
+    margin: 10px 0 10px 0;
+}
+
+
