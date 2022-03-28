@@ -340,7 +340,7 @@ function createDescription(x, y, width, height){
         ctx.fillText("Engine evaluation: " + this.eval, x + 10, y + 60);
         //cutoff
         ctx.fillStyle = lineColor;
-        ctx.fillRect(this.width - lineWidth+600, this.y, lineWidth, this.height);
+        ctx.fillRect(this.width - lineWidth+600, this.y, lineWidth, canvasHeight);
 
         
     }

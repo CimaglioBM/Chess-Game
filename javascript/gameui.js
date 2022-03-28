@@ -23,7 +23,6 @@ function startUI(){
     bg = new createBackground();
     notation = new createNotation(600, 100);
     gameCanvas.canvas.addEventListener('wheel', scrl);
-    console.log("Yoooo");
 }
 
 function createBoard(){
@@ -280,7 +279,10 @@ function createNotation(x, y){
             ctx.textAlign = "right";
             ctx.fillText(this.movesBlack[i].padEnd(4), x + canvasWidth - 20, y + 25 + 25 * (i - this.scroll));
         }
+        ctx.fillStyle = lineColor;
+        ctx.fillRect(800 - 3, 0, 3, canvasHeight);
     }
+    
 }
 
 function createBackground(){
@@ -292,6 +294,7 @@ function createBackground(){
 
         ctx.fillStyle = '#181818';
         ctx.fillRect(600 + lineWidth, lineWidth, canvasWidth - lineWidth * 2, canvasHeight - lineWidth * 2);
+        
     }
 }
 
