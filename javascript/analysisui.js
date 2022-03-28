@@ -283,7 +283,7 @@ function createNotation(x, y){
             }
             c++;
             ctx.textAlign = "right";
-            ctx.fillText(this.movesBlack[i].padEnd(4), x + canvasWidth - 20, y + 25 + 25 * (i - this.scroll));
+            ctx.fillText(this.movesBlack[i].padEnd(4), x + 200 - 20, y + 25 + 25 * (i - this.scroll));
         }
     }
 }

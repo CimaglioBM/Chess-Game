@@ -277,7 +277,7 @@ function createNotation(x, y){
             ctx.fillText((i + 1).toString() + ":", x + 10, y + 25 + 25 * (i - this.scroll));
             ctx.fillText(this.movesWhite[i], x + 30, y + 25 + 25 * (i - this.scroll));
             ctx.textAlign = "right";
-            ctx.fillText(this.movesBlack[i].padEnd(4), x + canvasWidth - 20, y + 25 + 25 * (i - this.scroll));
+            ctx.fillText(this.movesBlack[i].padEnd(4), x + 200 - 20, y + 25 + 25 * (i - this.scroll));
         }
         ctx.fillStyle = lineColor;
         ctx.fillRect(800 - 3, 0, 3, canvasHeight);
