@@ -39,7 +39,7 @@ function createBoard(){
         }
     }
 }
-
+//Pieces
 function createPieces(){
     //creating the white pieces
     this.whitePieces=[];
@@ -111,9 +111,9 @@ function createPawn(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src='javascript/pieceIcons/white/Chess_plt60.png';
+            img.src="static/images/pieceIcons/white/Chess_plt60.png";
         }else{
-            img.src='javascript/pieceIcons/black/Chess_pdt60.png';
+            img.src="static/images/pieceIcons/black/Chess_pdt60.png";
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -129,9 +129,9 @@ function createKnight(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src='javascript/pieceIcons/white/Chess_nlt60.png';
+            img.src="static/images/pieceIcons/white/Chess_nlt60.png";
         }else{
-            img.src='javascript/pieceIcons/black/Chess_ndt60.png';
+            img.src="static/images/pieceIcons/black/Chess_ndt60.png";
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -147,9 +147,9 @@ function createBishop(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src='javascript/pieceIcons/white/Chess_blt60.png';
+            img.src="static/images/pieceIcons/white/Chess_blt60.png";
         }else{
-            img.src='javascript/pieceIcons/black/Chess_bdt60.png';
+            img.src="static/images/pieceIcons/black/Chess_bdt60.png";
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -165,9 +165,9 @@ function createRook(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src='javascript/pieceIcons/white/Chess_rlt60.png';
+            img.src="static/images/pieceIcons/white/Chess_rlt60.png";
         }else{
-            img.src='javascript/pieceIcons/black/Chess_rdt60.png';
+            img.src="static/images/pieceIcons/black/Chess_rdt60.png";
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -183,9 +183,9 @@ function createQueen(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src='javascript/pieceIcons/white/Chess_qlt60.png';
+            img.src="static/images/pieceIcons/white/Chess_qlt60.png";
         }else{
-            img.src='javascript/pieceIcons/black/Chess_qdt60.png';
+            img.src="static/images/pieceIcons/black/Chess_qdt60.png";
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -201,9 +201,9 @@ function createKing(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src='javascript/pieceIcons/white/Chess_klt60.png';
+            img.src="static/images/pieceIcons/white/Chess_klt60.png";
         }else{
-            img.src='javascript/pieceIcons/black/Chess_kdt60.png';
+            img.src="static/images/pieceIcons/black/Chess_kdt60.png";
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
