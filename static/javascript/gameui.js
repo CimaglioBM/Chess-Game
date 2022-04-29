@@ -14,6 +14,33 @@ var moveCount = 0;
 var board;
 var pieces;
 var spaceSize=75;
+var selected;
+//white: playerColor = 0
+//black: playerColor = 1
+var playerColor = 0;
+
+function makeMove(x, y){
+    selected.x = x;
+    selected.y = y;
+    if(playerColor == 1){
+        for(let i = 0; i < pieces.whitePieces.length; i++){
+            if(pieces.whitePieces[i].x == x && pieces.whitePieces[i].y == y){
+                pieces.whitePieces.splice(i, 1);
+            }
+        }
+        
+    }else if(playerColor == 0){
+        for(let i = 0; i < pieces.blackPieces.length; i++){
+            if(pieces.blackPieces[i].x == x && pieces.blackPieces[i].y == y){
+                pieces.blackPieces.splice(i, 1);
+            }
+        }
+    }
+    selected.realX = (x - 1) * spaceSize;
+    selected.realY = (y - 1) * spaceSize;
+    playerColor = Math.abs(1 - playerColor);
+    selected = 0;
+}
 
 function startUI(){
     gameCanvas.start();
@@ -23,6 +50,42 @@ function startUI(){
     bg = new createBackground();
     notation = new createNotation(600, 100);
     gameCanvas.canvas.addEventListener('wheel', scrl);
+    gameCanvas.canvas.addEventListener('click', click);
+}
+
+function click(event){
+    //When you click
+    console.log(event.pageX);
+    console.log(event.pageY);
+    if(playerColor == 0){
+
+        for(let i = 0; i < pieces.whitePieces.length; i++){
+            if(pieces.whitePieces[i].realX <= event.pageX &&
+                pieces.whitePieces[i].realX + spaceSize > event.pageX &&
+                pieces.whitePieces[i].realY <= (event.pageY - 100) &&
+                pieces.whitePieces[i].realY + spaceSize > (event.pageY - 100)){
+                selected = pieces.whitePieces[i];
+                return;
+            }
+        }
+        
+    }else if(playerColor == 1){
+        for(let i = 0; i < pieces.blackPieces.length; i++){
+            if(pieces.blackPieces[i].realX <= event.pageX &&
+                pieces.blackPieces[i].realX + spaceSize > event.pageX &&
+                pieces.blackPieces[i].realY <= (event.pageY - 100) &&
+                pieces.blackPieces[i].realY + spaceSize > (event.pageY - 100)){
+                selected = pieces.blackPieces[i];
+                return;
+            }
+        }
+    }
+    if(selected == 0){
+        return;
+    }
+    if(event.pageX < 600){
+        makeMove(Math.floor(event.pageX / spaceSize) + 1, Math.floor((event.pageY - 100) / spaceSize) + 1);
+    }
 }
 
 function createBoard(){
@@ -39,7 +102,7 @@ function createBoard(){
         }
     }
 }
-//Pieces
+
 function createPieces(){
     //creating the white pieces
     this.whitePieces=[];
@@ -97,6 +160,8 @@ function createPieces(){
     this.draw=function(){
         for(let i=0;i<this.whitePieces.length;i++){
             this.whitePieces[i].draw();
+        }
+        for(let i=0;i<this.blackPieces.length;i++){
             this.blackPieces[i].draw();
         }
     }
@@ -111,9 +176,9 @@ function createPawn(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_plt60.png";
+            img.src='static/images/pieceIcons/white/Chess_plt60.png';
         }else{
-            img.src="static/images/pieceIcons/black/Chess_pdt60.png";
+            img.src='static/images/pieceIcons/black/Chess_pdt60.png';
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -129,9 +194,9 @@ function createKnight(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_nlt60.png";
+            img.src='static/images/pieceIcons/white/Chess_nlt60.png';
         }else{
-            img.src="static/images/pieceIcons/black/Chess_ndt60.png";
+            img.src='static/images/pieceIcons/black/Chess_ndt60.png';
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -147,9 +212,9 @@ function createBishop(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_blt60.png";
+            img.src='static/images/pieceIcons/white/Chess_blt60.png';
         }else{
-            img.src="static/images/pieceIcons/black/Chess_bdt60.png";
+            img.src='static/images/pieceIcons/black/Chess_bdt60.png';
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -165,9 +230,9 @@ function createRook(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_rlt60.png";
+            img.src='static/images/pieceIcons/white/Chess_rlt60.png';
         }else{
-            img.src="static/images/pieceIcons/black/Chess_rdt60.png";
+            img.src='static/images/pieceIcons/black/Chess_rdt60.png';
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -183,9 +248,9 @@ function createQueen(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_qlt60.png";
+            img.src='static/images/pieceIcons/white/Chess_qlt60.png';
         }else{
-            img.src="static/images/pieceIcons/black/Chess_qdt60.png";
+            img.src='static/images/pieceIcons/black/Chess_qdt60.png';
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
@@ -201,9 +266,9 @@ function createKing(x,y,color){
     this.draw=function(){
         let img = new Image();
         if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_klt60.png";
+            img.src='static/images/pieceIcons/white/Chess_klt60.png';
         }else{
-            img.src="static/images/pieceIcons/black/Chess_kdt60.png";
+            img.src='static/images/pieceIcons/black/Chess_kdt60.png';
         }
         ctx=gameCanvas.context;
         ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
