@@ -197,4 +197,37 @@ footer h3 {
     margin: 10px 0 10px 0;
 }
 
+.strt{
+    font-size: larger;
+    padding: 10px;
+    border: solid;
+    border-radius: 10px;
+    border-color: white;
+    padding: 25px;
+    
+}
 
+.strtex{
+    
+    box-sizing: border-box;
+    padding: 15px;
+    text-align: center;
+    
+}
+
+.strt a{
+    color: gainsboro;
+    text-decoration: none;
+    text-align: center;
+    border: solid;
+    border-radius: 5px;
+    border-color: white;
+    display: block;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.strt a:hover {
+    border-color: darkkhaki;
+    color: darkkhaki;
+}

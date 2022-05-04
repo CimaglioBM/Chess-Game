@@ -5,7 +5,7 @@
     <!-- TEMPORARY: REMOVE AFTER INITIAL DEV PHASE-->
     <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/analysis.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
     
     
 </head>
@@ -19,7 +19,7 @@
         <input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="alternateBackgroundColor()" autocomplete="off" />
         <!-- Due to the way the HTML is structured, there is actually two headers.
         This should probably be fixed -->
-        <a id="header-text-responsive" href="index.php">Analysis Board</a>
+        <a id="header-text-responsive" href="index.php">Chess</a>
 
         <label for="nav-toggle" class="nav-label">
             <div class="nav-bars"></div>
@@ -28,10 +28,11 @@
         </label>
         <div class="navbar" id="navbar">
             <div class="left-navbar">
-                <a id="header-text"> Analysis Board</a>
+                <a id="header-text">Chess Game</a>
             </div>
 
             <div class="right-navbar">
+                <a id="about-button" href="analysisBoard.html"> Analysis Board</a>
                 <a id="about-button" href="home.html"> Home</a>
             </div>
         </div>
@@ -39,14 +40,24 @@
 
     <main>
         <div class="main">
+            <div id=canvas>
+                <body onload="startUI()">
+                    <script src="{{url_for('static', filename='javascript/gameui.js')}}"></script>
+                </body>
+            </div>
+        </div>
+        <div class="side">
             <h2>
-
-                <div id=canvas>
-                    <body onload="startUI()">
-                        <script src="{{url_for('static', filename='javascript/analysisui.js')}}"></script>
-                    </body>
-                </div>
+                Moves
             </h2>
+            <p>
+                <br>
+               A Log of moves that have been made?
+            
+    
+                <br>
+    
+            </p>
         </div>
     </main>
 

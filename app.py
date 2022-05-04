@@ -7,6 +7,14 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
+@app.route('/starterPage.html')
+def startgame():
+    return render_template('starterPage.html')
+
+@app.route('/game.html')
+def game():
+    return render_template('/game.html')
+
 @app.route('/analysisBoard.html')
 def analysis():
     return render_template('/analysisBoard.html')

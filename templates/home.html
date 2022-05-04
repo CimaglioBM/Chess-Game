@@ -13,52 +13,51 @@
 
 <body>
 
-    <header id="header">
+  <header id="header">
 
-        <!-- Autocomplete="off" makes it so that the nav-bar mininizes on refresh -->
-        <input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="alternateBackgroundColor()" autocomplete="off" />
-        <!-- Due to the way the HTML is structured, there is actually two headers.
-        This should probably be fixed -->
-        <a id="header-text-responsive" href="index.php">Chess</a>
+    <!-- Autocomplete="off" makes it so that the nav-bar mininizes on refresh -->
+    <input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="alternateBackgroundColor()" autocomplete="off" />
+    <!-- Due to the way the HTML is structured, there is actually two headers.
+    This should probably be fixed -->
+    <a id="header-text-responsive" href="index.php">Testing</a>
 
-        <label for="nav-toggle" class="nav-label">
-            <div class="nav-bars"></div>
-            <div class="nav-bars"></div>
-            <div class="nav-bars"></div>
-        </label>
-        <div class="navbar" id="navbar">
-            <div class="left-navbar">
-                <a id="header-text" href="index.php">Chess</a>
-            </div>
+    <label for="nav-toggle" class="nav-label">
+        <div class="nav-bars"></div>
+        <div class="nav-bars"></div>
+        <div class="nav-bars"></div>
+    </label>
 
-            <div class="right-navbar">
-                <a id="about-button" href="analysisBoard.html"> Analysis Board</a>
-            </div>
+    <div class="navbar" id="navbar">
+        <div class="left-navbar">
+            <a id="header-text" href="starterPage.html"> Chess</a>
         </div>
-    </header>
 
-    <main>
-        <div class="main">
-            <div id=canvas>
-                <body onload="startUI()">
-                    <script src="{{url_for('static', filename='javascript/gameui.js')}}"></script>
-                </body>
-            </div>
+        <div class="right-navbar">
+            <a id="about-button" href="analysisBoard.html"> Analysis Board</a>
+            <a id="about-button" href="starterPage.html"> Chess</a>
         </div>
-        <div class="side">
-            <h2>
-                Moves
-            </h2>
-            <p>
-                <br>
-               A Log of moves that have been made?
-            
+    </div>
+</header>
+<main>
+  <div class="main">
+      <h2>
+          Welcome, please select an option
+          <br>
+      </h2>
+    <div class="strt">
+
+      <div class="strtex">
+        <a href="starterPage.html">Play a New Game of Chess</a>
+      </div>
+
+      <br>
+
+      <div class="strtex">
+        <a href="analysisBoard.html">Analize a Previous Game of Chess</a>
+      </div>  
+
+    </div>
+
     
-                <br>
-    
-            </p>
-        </div>
-    </main>
-
 </body>
 
