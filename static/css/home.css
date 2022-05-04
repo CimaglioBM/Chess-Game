@@ -29,23 +29,56 @@ header {
     z-index: 1;
 }
 
+.difficulty {
+    list-style-type: none;
+  }
 
-
-button{
+.difficulty li {
+    float: left;
+    position: relative;
     color: white;
     background-color: #282828;
     border-radius: 1;
     border-color: darkkhaki;
-    width: 100px;
-    height: 75px;
-    border-radius: 15px;
+    width: 160px;
+    height: 80px;
     margin: 20px;
-    
+    border-radius: 15px;
+    text-align: center;
 }
 
-.button1:hover, .button2:hover, .button3:hover{
-    color: darkkhaki;
+.difficulty label,
+.difficulty input {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 15px;
+  
 }
+
+.difficulty input[type="radio"] {
+  opacity: 0.01;
+}
+
+.difficulty input[type="radio"]:checked+label,
+.Checked+label {
+  background: darkkhaki;
+}
+
+.difficulty label {
+  padding: 5px;
+  border: 1px solid #CCC;
+  cursor: pointer;
+}
+
+.difficulty label:hover {
+  background: darkkhaki;
+}
+
+
 
 #header-text, #header-text-responsive{
     margin: 0 10px 0 10px;
