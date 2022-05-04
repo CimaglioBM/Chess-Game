@@ -29,6 +29,24 @@ header {
     z-index: 1;
 }
 
+
+
+button{
+    color: white;
+    background-color: #282828;
+    border-radius: 1;
+    border-color: darkkhaki;
+    width: 100px;
+    height: 75px;
+    border-radius: 15px;
+    margin: 20px;
+    
+}
+
+.button1:hover, .button2:hover, .button3:hover{
+    color: darkkhaki;
+}
+
 #header-text, #header-text-responsive{
     margin: 0 10px 0 10px;
     color: white;
