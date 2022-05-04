@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- TEMPORARY: REMOVE AFTER INITIAL DEV PHASE-->
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+
+    <link rel="stylesheet" href="/static/css/home.css" />
+    
+    
+</head>
+
+
+<body>
+
+    <header id="header">
+
+        <!-- Autocomplete="off" makes it so that the nav-bar mininizes on refresh -->
+        <input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="alternateBackgroundColor()" autocomplete="off" />
+        <!-- Due to the way the HTML is structured, there is actually two headers.
+        This should probably be fixed -->
+        <a id="header-text-responsive" href="index.php">Testing</a>
+
+        <label for="nav-toggle" class="nav-label">
+            <div class="nav-bars"></div>
+            <div class="nav-bars"></div>
+            <div class="nav-bars"></div>
+        </label>
+
+        <div class="navbar" id="navbar">
+            <div class="left-navbar">
+                <a id="header-text" href="home.html"> Chess</a>
+            </div>
+
+            <div class="right-navbar">
+                <a id="about-button" href="analysisBoard.html"> Analysis Board</a>
+                <a id="about-button" href="home.html"> Chess</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="main">
+            <h2>
+                Would you like to play a game?
+                <br>
+            </h2>
+            <h3>Select the Difficulty</h3>
+            
+        
+            <div class="buttons">
+                <ul class="difficulty">
+                    <li>
+                      <input type="radio" id="easy" name="difficulty" />
+                      <label for="easy"><h2>Easy</h2></label>
+                    </li>
+                    <li>
+                      <input type="radio" id="medium" name="difficulty" checked="checked" />
+                      <label for="medium"><h2>Medium</h2></label>
+                    </li>
+                    <li>
+                      <input type="radio" id="Hard" name="difficulty" />
+                      <label for="Hard"><h2>Hard</h2></label>
+                    </li>
+                    
+                  </ul>
+            </div>
+            <h3>Choose Which Side To Play As!</h3>
+            <div class="buttons">
+                <ul class="difficulty">
+                    <li>
+                      <input type="radio" id="Black" name="side-Selection" />
+                      <label for="Black"><h2>Black</h2></label>
+                    </li>
+                    <li>
+                      <input type="radio" id="White" name="side-Selection" checked="checked" />
+                      <label for="White"><h2>White</h2></label>
+                    </li>
+                  </ul>
+            </div>
+
+        </div>
+    </main>
+</body>
+
