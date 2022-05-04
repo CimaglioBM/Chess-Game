@@ -1,7 +1,30 @@
 from distutils.log import debug
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+
+import scripts.chessHelper as cH
+
 
 app = Flask(__name__)
+
+@app.route('/legalMoves')
+def legalMoves():
+    return cH.moveLegal(**request.args)
+
+@app.route('/getNewFen')
+def newFen():
+    return cH.getNewFen(**request.args)
+    
+@app.route('/getNewFenSan')
+def newFenSan():
+    return cH.getNewFenSan(**request.args)
+
+@app.route('/uciToAn')
+def uciToAn():
+    return cH.uciToAn(**request.args)
+
+@app.route('/computerMove')
+def computerMove():
+    return cH.getComputerMove(**request.args)
 
 @app.route('/')
 def home():
