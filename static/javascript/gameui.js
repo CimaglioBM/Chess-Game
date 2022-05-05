@@ -63,30 +63,16 @@ function makeMove(x, y){
     success = $.ajax({type: "GET", url: '/legalMoves?fen='+fen+'&moveStart='+square(selected.x, selected.y)+'&moveEnd='+square(x, y) + promotion, async: false}).responseText;
     if(success==="true"){
         notation.addMove($.ajax({type: "GET", url: '/uciToAn?fen='+fen+'&moveStart='+square(selected.x, selected.y)+'&moveEnd='+square(x, y) + promotion, async: false}).responseText, Math.abs(1-playerColor));
+        
+        
         fen = $.ajax({type: "GET", url: '/getNewFen?fen='+fen+'&moveStart='+square(selected.x, selected.y)+'&moveEnd='+square(x, y) + promotion, async: false}).responseText;
         
         pieces.setPieces(fen);
-        /*
-        selected.x = x;
-        selected.y = y;
-        if(playerColor == 1){
-            for(let i = 0; i < pieces.whitePieces.length; i++){
-                if(pieces.whitePieces[i].x == x && pieces.whitePieces[i].y == y){
-                    pieces.whitePieces.splice(i, 1);
-                }
-            }
-            
-        }else if(playerColor == 0){
-            for(let i = 0; i < pieces.blackPieces.length; i++){
-                if(pieces.blackPieces[i].x == x && pieces.blackPieces[i].y == y){
-                    pieces.blackPieces.splice(i, 1);
-                }
-            }
+        if($.ajax({type: "GET", url: '/isMate?fen='+fen, async: false}).responseText === "True"){
+            gameState = 1;
+        }else{
+            playerColor = Math.abs(1 - playerColor);
         }
-        selected.realX = (x - 1) * spaceSize;
-        selected.realY=canvasHeight-y*spaceSize;
-        */
-        playerColor = Math.abs(1 - playerColor);
     }
     selected = 0;
 }
@@ -218,6 +204,9 @@ function createPieces(){
     }
 
     this.setPieces = function(fen){
+        if(typeof fen != "string"){
+            return;
+        }
         this.whitePieces=[];
         this.blackPieces=[];
         i = 0;
@@ -524,34 +513,33 @@ function createTimer(x, y, width, height, time, increment){
 }
 
 function updateCanvas(){
+    //console.log(gameState);
     switch(gameState){
         case 0:
-            
-            board.draw();
             if(selected != 0){
                 ctx = gameCanvas.context;
                 ctx.fillStyle = 'lawngreen';
                 ctx.strokeRect(selected.realX, selected.realY, spaceSize, spaceSize);
             }
-            pieces.draw();
-            bg.draw();
-            timer.draw();
             if(playerColor == chosenColor){
                 timer.decrement(20 / 1000);
             }else if(computerMove == null){
-                //computerMove = 'Nh6';
                 computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&depth=0', async: false}).responseText;
-                
             }else{
                 notation.addMove(computerMove, Math.abs(1-playerColor));
                 fen = $.ajax({type: "GET", url: '/getNewFenSan?fen='+fen+'&san='+computerMove, async: false}).responseText;
-                
+                //console.log(fen);
                 pieces.setPieces(fen);
                 computerMove = null;
                 playerColor = Math.abs(1 - playerColor);
             }
-            notation.draw();
             
             break;
+            
     }
+    board.draw();
+    pieces.draw();
+    bg.draw();
+    timer.draw();
+    notation.draw();
 }

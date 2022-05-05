@@ -54,6 +54,69 @@ function createBoard(){
     }
 }
 
+//Pieces
+function createPieces(){
+    //creating the white pieces
+    this.whitePieces=[];
+
+    //pawns
+    for(let i=0;i<8;i++){
+        this.whitePieces.push(new createPawn(i+1,2,'white'));
+    }
+
+    //knights
+    this.whitePieces.push(new createKnight(2,1,'white'));
+    this.whitePieces.push(new createKnight(7,1,'white'));
+
+    //bishops
+    this.whitePieces.push(new createBishop(3,1,'white'));
+    this.whitePieces.push(new createBishop(6,1,'white'));
+
+    //rooks
+    this.whitePieces.push(new createRook(1,1,'white'));
+    this.whitePieces.push(new createRook(8,1,'white'));
+
+    //queen
+    this.whitePieces.push(new createQueen(4,1,'white'));
+
+    //king
+    this.whitePieces.push(new createKing(5,1,'white'));
+
+    //creating the black pieces
+    this.blackPieces=[];
+
+    //pawns
+    for(let i=0;i<8;i++){
+        this.blackPieces.push(new createPawn(i+1,7,'black'));
+    }
+
+    //knights
+    this.blackPieces.push(new createKnight(2,8,'black'));
+    this.blackPieces.push(new createKnight(7,8,'black'));
+
+    //bishops
+    this.blackPieces.push(new createBishop(3,8,'black'));
+    this.blackPieces.push(new createBishop(6,8,'black'));
+
+    //rooks
+    this.blackPieces.push(new createRook(1,8,'black'));
+    this.blackPieces.push(new createRook(8,8,'black'));
+
+    //queen
+    this.blackPieces.push(new createQueen(4,8,'black'));
+
+    //king
+    this.blackPieces.push(new createKing(5,8,'black'));
+
+
+    this.draw=function(){
+        for(let i=0;i<this.whitePieces.length;i++){
+            this.whitePieces[i].draw();
+            this.blackPieces[i].draw();
+        }
+    }
+}
+
 function createPawn(x,y,color){
     this.x=x;
     this.y=y;
