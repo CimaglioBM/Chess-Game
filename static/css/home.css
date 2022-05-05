@@ -29,6 +29,24 @@ header {
     z-index: 1;
 }
 
+button {
+    float: left;
+    position: relative;
+    color: white;
+    background-color: #282828;
+    border-radius: 1;
+    border-color: darkkhaki;
+    width: 160px;
+    height: 80px;
+    margin: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+button:hover{
+    background-color: darkkhaki;
+}
+
 .difficulty {
     list-style-type: none;
   }
@@ -197,37 +215,4 @@ footer h3 {
     margin: 10px 0 10px 0;
 }
 
-.strt{
-    font-size: larger;
-    padding: 10px;
-    border: solid;
-    border-radius: 10px;
-    border-color: white;
-    padding: 25px;
-    
-}
 
-.strtex{
-    
-    box-sizing: border-box;
-    padding: 15px;
-    text-align: center;
-    
-}
-
-.strt a{
-    color: gainsboro;
-    text-decoration: none;
-    text-align: center;
-    border: solid;
-    border-radius: 5px;
-    border-color: white;
-    display: block;
-    box-sizing: border-box;
-    padding: 15px;
-}
-
-.strt a:hover {
-    border-color: darkkhaki;
-    color: darkkhaki;
-}
