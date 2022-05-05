@@ -29,12 +29,12 @@
 
         <div class="navbar" id="navbar">
             <div class="left-navbar">
-                <a id="header-text" href="home.html"> Home</a>
+                <a id="header-text" href="home.html"> Chess</a>
             </div>
 
             <div class="right-navbar">
                 <a id="about-button" href="analysisBoard.html"> Analysis Board</a>
-                <a id="about-button" href="home.html"> Home</a>
+                <a id="about-button" href="home.html"> Chess</a>
             </div>
         </div>
     </header>
@@ -51,11 +51,11 @@
             <div class="buttons">
                 <ul class="difficulty">
                     <li>
-                      <input type="radio" id="easy" name="difficulty" />
+                      <input type="radio" id="easy" name="difficulty" checked="checked" />
                       <label for="easy"><h2>Easy</h2></label>
                     </li>
                     <li>
-                      <input type="radio" id="medium" name="difficulty" checked="checked" />
+                      <input type="radio" id="medium" name="difficulty" />
                       <label for="medium"><h2>Medium</h2></label>
                     </li>
                     <li>
@@ -68,17 +68,21 @@
             <h3>Choose Which Side To Play As!</h3>
             <div class="buttons">
                 <ul class="difficulty">
-                    <li>
+                  <li>
+                    <input type="radio" id="White" name="side-Selection" checked="checked" />
+                    <label for="White"><h2>White</h2></label>
+                  </li>  
+                  <li>
                       <input type="radio" id="Black" name="side-Selection" />
                       <label for="Black"><h2>Black</h2></label>
-                    </li>
-                    <li>
-                      <input type="radio" id="White" name="side-Selection" checked="checked" />
-                      <label for="White"><h2>White</h2></label>
-                    </li>
+                  </li>  
                   </ul>
             </div>
 
+            <div>
+              <h2>Ready?</h2>
+              <button><h2>Lets Go!</h2></button>
+            </div>
         </div>
     </main>
 </body>
