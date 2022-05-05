@@ -14,8 +14,34 @@ var moveSelect = 1;
 var board;
 var pieces;
 var spaceSize=75;
+var fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+var playerColor = 0;
+
+var openFile = function(event) {
+    var input = event.target;
+
+    var reader = new FileReader();
+    reader.onload = function(){
+        var text = reader.result;
+        var node = document.getElementById('output');
+        //node.innerText = text;
+        var s = text.split('\n');
+        var ss;
+        for(i = 0; i < s.length; i++){
+            console.log(s[i]);
+            m = $.ajax({type: "GET", url: '/uciToAn?fen='+fen+'&san='+(s[i]), async: false}).responseText, Math.abs(1-playerColor);
+            notation.addMove(m, Math.abs(1-playerColor));
+            fen = $.ajax({type: "GET", url: '/getNewFenSan?fen='+fen+'&san='+m, async: false}).responseText;
+            playerColor = Math.abs(1 - playerColor);
+        }
+        //console.log(reader.result.substring(0, 200));
+    };
+    reader.readAsText(input.files[0]);
+    
+};
 
 function startUI(){
+    
     gameCanvas.start();
     board=new createBoard();
     pieces=new createPieces();
@@ -235,21 +261,24 @@ function createNotation(x, y){
     this.x = x;
     this.y = y;
     
-    this.movesWhite = ["e4", "Nf3", "Bc4"];
-    this.movesBlack = ["e5", "Nc6", "Bc5"];
+    this.movesWhite = [];
+    this.movesBlack = [];
     this.scroll=0;
     
     this.h = canvasHeight - y;
 
     this.addScroll = function(dY){
+        if(this.movesWhite.length < 1){
+            return;
+        }
         this.scroll += Math.sign(dY);
         this.scroll = Math.max(0, this.scroll);
-        this.scroll = Math.min(this.movesBlack.length - 1, this.scroll)
+        this.scroll = Math.min(this.movesWhite.length - 1, this.scroll);
     }
     this.addMove = function(text, white){
         if(white){
             this.movesWhite.push(text);
-            this.movesBlack.length = this.movesWhite.length;
+            //this.movesBlack.length = this.movesWhite.length;
         }else{
             this.movesBlack.push(text);
         }
@@ -274,7 +303,7 @@ function createNotation(x, y){
             }else{
                 ctx.fillStyle = 'silver';
             }
-            ctx.fillText(this.movesWhite[i], x + 30, y + 25 + 25 * (i - this.scroll));
+            ctx.fillText(this.movesWhite[i], x + 40, y + 25 + 25 * (i - this.scroll));
 
             c++;
             if(c == moveSelect){
@@ -284,7 +313,9 @@ function createNotation(x, y){
             }
             c++;
             ctx.textAlign = "right";
-            ctx.fillText(this.movesBlack[i].padEnd(4), x + 200 - 20, y + 25 + 25 * (i - this.scroll));
+            if(this.movesBlack.length > i){
+                ctx.fillText(this.movesBlack[i].padEnd(4), x + 200 - 20, y + 25 + 25 * (i - this.scroll));
+            }
         }
     }
 }

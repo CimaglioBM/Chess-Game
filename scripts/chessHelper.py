@@ -31,6 +31,10 @@ def uciToAn(fen, moveStart, moveEnd):
     b = chess.Board(fen)
     return b.san(chess.Move.from_uci(moveStart+moveEnd))
 
+def uciToAn(fen, san):
+    b = chess.Board(fen)
+    return b.san(chess.Move.from_uci(san))
+
 def getComputerMove(fen, depth):
     b = chess.Board(fen)
     legal_moves = str(b.legal_moves)[38:-2].replace(',','').split()

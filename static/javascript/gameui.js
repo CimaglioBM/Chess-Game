@@ -429,7 +429,7 @@ function createNotation(x, y){
         }
         this.scroll += Math.sign(dY);
         this.scroll = Math.max(0, this.scroll);
-        this.scroll = Math.min(this.movesWhite.length - 1, this.scroll)
+        this.scroll = Math.min(this.movesWhite.length - 1, this.scroll);
     }
     this.addMove = function(text, white){
         if(white){

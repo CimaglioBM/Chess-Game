@@ -10,7 +10,7 @@
     
 </head>
 
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <body>
 
     <header id="header">
@@ -44,9 +44,13 @@
                 <div id=canvas>
                     <body onload="startUI()">
                         <script src="{{url_for('static', filename='javascript/analysisui.js')}}"></script>
+                        <input type='file' accept='text/plain' onchange='openFile(event)'><br>
+                        <div id='output'>
+                        </div>
                     </body>
                 </div>
             </h2>
+            
         </div>
     </main>
 

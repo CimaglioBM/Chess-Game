@@ -22,6 +22,7 @@ def newFenSan():
 def uciToAn():
     return cH.uciToAn(**request.args)
 
+
 @app.route('/isMate')
 def isMate():
     return cH.isMate(**request.args)
