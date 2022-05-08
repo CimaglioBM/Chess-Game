@@ -18,9 +18,21 @@ def newFen():
 def newFenSan():
     return cH.getNewFenSan(**request.args)
 
-@app.route('/uciToAn')
-def uciToAn():
-    return cH.uciToAn(**request.args)
+@app.route('/getNewFenUci')
+def newFenUci():
+    return cH.getNewFenUci(**request.args)
+
+@app.route('/getFenMoveStr')
+def getFenMoveStr():
+    return cH.getFenMoveStr(**request.args)
+
+@app.route('/uciToAn0')
+def uciToAn0():
+    return cH.uciToAn0(**request.args)
+
+@app.route('/uciToAn1')
+def uciToAn1():
+    return cH.uciToAn1(**request.args)
 
 
 @app.route('/isMate')

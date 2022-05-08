@@ -26,12 +26,26 @@ def getNewFenSan(fen, san):
     b.push_san(san)
     return b.fen()
 
+def getNewFenUci(fen, uci):
+    b = chess.Board(fen)
+    b.push_uci(uci)
+    return b.fen()
 
-def uciToAn(fen, moveStart, moveEnd):
+def getFenMoveStr(movestr):
+    moveList = movestr.split(",")
+    b = chess.Board()
+    for a in moveList:
+        a = a.replace(' ','+')
+        if(a == ''):
+            break
+        b.push_san(a)
+    return b.fen()
+
+def uciToAn0(fen, moveStart, moveEnd):
     b = chess.Board(fen)
     return b.san(chess.Move.from_uci(moveStart+moveEnd))
 
-def uciToAn(fen, san):
+def uciToAn1(fen, san):
     b = chess.Board(fen)
     return b.san(chess.Move.from_uci(san))
 

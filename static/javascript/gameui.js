@@ -62,7 +62,7 @@ function makeMove(x, y){
     }
     success = $.ajax({type: "GET", url: '/legalMoves?fen='+fen+'&moveStart='+square(selected.x, selected.y)+'&moveEnd='+square(x, y) + promotion, async: false}).responseText;
     if(success==="true"){
-        notation.addMove($.ajax({type: "GET", url: '/uciToAn?fen='+fen+'&moveStart='+square(selected.x, selected.y)+'&moveEnd='+square(x, y) + promotion, async: false}).responseText, Math.abs(1-playerColor));
+        notation.addMove($.ajax({type: "GET", url: '/uciToAn0?fen='+fen+'&moveStart='+square(selected.x, selected.y)+'&moveEnd='+square(x, y) + promotion, async: false}).responseText, Math.abs(1-playerColor));
         
         
         fen = $.ajax({type: "GET", url: '/getNewFen?fen='+fen+'&moveStart='+square(selected.x, selected.y)+'&moveEnd='+square(x, y) + promotion, async: false}).responseText;

@@ -10,11 +10,12 @@ var bg;
 var lineWidth = 3;
 var lineColor = 'grey';
 var mouseO = false;
-var moveSelect = 1;
+var moveSelect = 0;
 var board;
 var pieces;
 var spaceSize=75;
 var fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+var prevFen = "";
 var playerColor = 0;
 
 var openFile = function(event) {
@@ -26,12 +27,11 @@ var openFile = function(event) {
         var node = document.getElementById('output');
         //node.innerText = text;
         var s = text.split('\n');
-        var ss;
-        for(i = 0; i < s.length; i++){
+        for(i = 0; i < s.length - 1; i++){
             console.log(s[i]);
-            m = $.ajax({type: "GET", url: '/uciToAn?fen='+fen+'&san='+(s[i]), async: false}).responseText, Math.abs(1-playerColor);
+            m = $.ajax({type: "GET", url: '/uciToAn1?fen='+fen+'&san='+(s[i]), async: false}).responseText, Math.abs(1-playerColor);
             notation.addMove(m, Math.abs(1-playerColor));
-            fen = $.ajax({type: "GET", url: '/getNewFenSan?fen='+fen+'&san='+m, async: false}).responseText;
+            fen = $.ajax({type: "GET", url: '/getNewFenUci?fen='+fen+'&uci='+s[i], async: false}).responseText;
             playerColor = Math.abs(1 - playerColor);
         }
         //console.log(reader.result.substring(0, 200));
@@ -49,9 +49,38 @@ function startUI(){
     bg = new createBackground();
     notation = new createNotation(600, 80);
     gameCanvas.canvas.addEventListener('wheel', scrl);
+    window.addEventListener("keydown", (event) =>{
+        //console.log(`key=${event.key},code=${event.code}`);
+        if(event.key === "ArrowRight"){
+            forward();
+        }else if(event.key === "ArrowLeft"){
+            backward();
+        }
+    });
 }
 
+function forward(){
+    moveSelect = Math.min(notation.movesWhite.length + notation.movesBlack.length, moveSelect + 1);
+    updateBoard(moveSelect);
+}
 
+function backward(){
+    moveSelect = Math.max(0, moveSelect - 1);
+    updateBoard(moveSelect);
+}
+
+function updateBoard(a){//a = move number
+    movestr = "";
+    for(i = 1; i <= a; i++){
+        if(i % 2 == 0){//even
+            movestr += notation.movesBlack[(i / 2) - 1] + ",";
+        }else{//odd
+            movestr += notation.movesWhite[(i - 1) / 2] + ",";
+        }
+    }
+    fen = $.ajax({type: "GET", url: '/getFenMoveStr?movestr='+movestr, async: false}).responseText;
+    pieces.setPieces(fen);
+}
 
 var gameCanvas={
     canvas: document.createElement("canvas"),
@@ -138,7 +167,67 @@ function createPieces(){
     this.draw=function(){
         for(let i=0;i<this.whitePieces.length;i++){
             this.whitePieces[i].draw();
+        }
+        for(let i=0;i<this.blackPieces.length;i++){
             this.blackPieces[i].draw();
+        }
+    }
+
+    this.setPieces = function(fen){
+        if(typeof fen != "string"){
+            return;
+        }
+        this.whitePieces=[];
+        this.blackPieces=[];
+        i = 0;
+        xx = 1;
+        yy = 8;
+        while(i < fen.length){
+            c = fen.charAt(i);
+            if(!isNaN(c * 1)){
+                xx += c - 1;
+            }else if(c === '/'){
+                yy--;
+                xx = 0;
+            }else if(c === ' '){
+                break;
+            }else{
+                selCol = 'black';
+                if (c == c.toUpperCase()) {
+                    selCol = 'white';
+                    if(c === 'P'){//Pawn
+                        this.whitePieces.push(new createPawn(xx,yy,selCol));
+                    }else if(c === 'N'){//Knight
+                        this.whitePieces.push(new createKnight(xx,yy,selCol));
+                    }else if(c === 'B'){//Bishop
+                        this.whitePieces.push(new createBishop(xx,yy,selCol));
+                    }else if(c === 'R'){//Rook
+                        this.whitePieces.push(new createRook(xx,yy,selCol));
+                    }else if(c === 'Q'){//Queen
+                        this.whitePieces.push(new createQueen(xx,yy,selCol));
+                    }else if(c === 'K'){//King
+                        this.whitePieces.push(new createKing(xx,yy,selCol));
+                    }
+                }else{
+                    if(c === 'p'){//Pawn
+                        this.blackPieces.push(new createPawn(xx,yy,selCol));
+                    }else if(c === 'n'){//Knight
+                        this.blackPieces.push(new createKnight(xx,yy,selCol));
+                    }else if(c === 'b'){//Bishop
+                        this.blackPieces.push(new createBishop(xx,yy,selCol));
+                    }else if(c === 'r'){//Rook
+                        this.blackPieces.push(new createRook(xx,yy,selCol));
+                    }else if(c === 'q'){//Queen
+                        this.blackPieces.push(new createQueen(xx,yy,selCol));
+                    }else if(c === 'k'){//King
+                        this.blackPieces.push(new createKing(xx,yy,selCol));
+                    }
+                }
+                
+                
+            }
+            i++;
+            xx++;
         }
     }
 }
@@ -149,15 +238,17 @@ function createPawn(x,y,color){
     this.color=color;
     this.realX=(x-1)*spaceSize;
     this.realY=canvasHeight-y*spaceSize;
+    this.type = "pawn";
+    this.img = new Image();
+    if(color==='white'){
+        this.img.src='static/images/pieceIcons/white/Chess_plt60.png';
+    }else{
+        this.img.src='static/images/pieceIcons/black/Chess_pdt60.png';
+    }
     this.draw=function(){
-        let img = new Image();
-        if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_plt60.png";
-        }else{
-            img.src="static/images/pieceIcons/black/Chess_pdt60.png";
-        }
+        
         ctx=gameCanvas.context;
-        ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
+        ctx.drawImage(this.img,this.realX,this.realY,spaceSize,spaceSize);
     }
 }
 
@@ -167,15 +258,16 @@ function createKnight(x,y,color){
     this.color=color;
     this.realX=(x-1)*spaceSize;
     this.realY=canvasHeight-y*spaceSize;
+    this.type = "knight";
+    this.img = new Image();
+    if(color==='white'){
+        this.img.src='static/images/pieceIcons/white/Chess_nlt60.png';
+    }else{
+        this.img.src='static/images/pieceIcons/black/Chess_ndt60.png';
+    }
     this.draw=function(){
-        let img = new Image();
-        if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_nlt60.png";
-        }else{
-            img.src="static/images/pieceIcons/black/Chess_ndt60.png";
-        }
         ctx=gameCanvas.context;
-        ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
+        ctx.drawImage(this.img,this.realX,this.realY,spaceSize,spaceSize);
     }
 }
 
@@ -185,15 +277,17 @@ function createBishop(x,y,color){
     this.color=color;
     this.realX=(x-1)*spaceSize;
     this.realY=canvasHeight-y*spaceSize;
+    this.type = "bishop";
+    this.img = new Image();
+    if(color==='white'){
+        this.img.src='static/images/pieceIcons/white/Chess_blt60.png';
+    }else{
+        this.img.src='static/images/pieceIcons/black/Chess_bdt60.png';
+    }
     this.draw=function(){
-        let img = new Image();
-        if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_blt60.png";
-        }else{
-            img.src="static/images/pieceIcons/black/Chess_bdt60.png";
-        }
+        
         ctx=gameCanvas.context;
-        ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
+        ctx.drawImage(this.img,this.realX,this.realY,spaceSize,spaceSize);
     }
 }
 
@@ -203,15 +297,16 @@ function createRook(x,y,color){
     this.color=color;
     this.realX=(x-1)*spaceSize;
     this.realY=canvasHeight-y*spaceSize;
+    this.type = "rook";
+    this.img = new Image();
+    if(color==='white'){
+        this.img.src='static/images/pieceIcons/white/Chess_rlt60.png';
+    }else{
+        this.img.src='static/images/pieceIcons/black/Chess_rdt60.png';
+    }
     this.draw=function(){
-        let img = new Image();
-        if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_rlt60.png";
-        }else{
-            img.src="static/images/pieceIcons/black/Chess_rdt60.png";
-        }
         ctx=gameCanvas.context;
-        ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
+        ctx.drawImage(this.img,this.realX,this.realY,spaceSize,spaceSize);
     }
 }
 
@@ -221,15 +316,17 @@ function createQueen(x,y,color){
     this.color=color;
     this.realX=(x-1)*spaceSize;
     this.realY=canvasHeight-y*spaceSize;
+    this.type = "queen";
+    this.img = new Image();
+    if(color==='white'){
+        this.img.src='static/images/pieceIcons/white/Chess_qlt60.png';
+    }else{
+        this.img.src='static/images/pieceIcons/black/Chess_qdt60.png';
+    }
     this.draw=function(){
-        let img = new Image();
-        if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_qlt60.png";
-        }else{
-            img.src="static/images/pieceIcons/black/Chess_qdt60.png";
-        }
+        
         ctx=gameCanvas.context;
-        ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
+        ctx.drawImage(this.img,this.realX,this.realY,spaceSize,spaceSize);
     }
 }
 
@@ -239,15 +336,17 @@ function createKing(x,y,color){
     this.color=color;
     this.realX=(x-1)*spaceSize;
     this.realY=canvasHeight-y*spaceSize;
+    this.type = "king";
+    this.img = new Image();
+    if(color==='white'){
+        this.img.src='static/images/pieceIcons/white/Chess_klt60.png';
+    }else{
+        this.img.src='static/images/pieceIcons/black/Chess_kdt60.png';
+    }
     this.draw=function(){
-        let img = new Image();
-        if(color==='white'){
-            img.src="static/images/pieceIcons/white/Chess_klt60.png";
-        }else{
-            img.src="static/images/pieceIcons/black/Chess_kdt60.png";
-        }
+        
         ctx=gameCanvas.context;
-        ctx.drawImage(img,this.realX,this.realY,spaceSize,spaceSize);
+        ctx.drawImage(this.img,this.realX,this.realY,spaceSize,spaceSize);
     }
 }
 
@@ -286,10 +385,9 @@ function createNotation(x, y){
     this.draw = function(){
         ctx = gameCanvas.context;
         ctx.font="Bold 20px arial";
-        c = 0;
         for(let i = this.scroll; i < this.movesWhite.length; i++){
             ctx.font =  this.f;
-            if(Math.floor(c / 2) == Math.floor(moveSelect / 2)){
+            if(Math.floor((moveSelect - 1) / 2) == i){
                 ctx.fillStyle = 'white';
             }else{
                 ctx.fillStyle = 'silver';
@@ -298,20 +396,18 @@ function createNotation(x, y){
             ctx.textAlign = "left";
             ctx.fillText((i + 1).toString() + ":", x + 10, y + 25 + 25 * (i - this.scroll));
 
-            if(c == moveSelect){
+            if((moveSelect - 1) == i * 2){
                 ctx.fillStyle = 'white';
             }else{
                 ctx.fillStyle = 'silver';
             }
             ctx.fillText(this.movesWhite[i], x + 40, y + 25 + 25 * (i - this.scroll));
 
-            c++;
-            if(c == moveSelect){
+            if((moveSelect - 2) == i * 2){
                 ctx.fillStyle = 'white';
             }else{
                 ctx.fillStyle = 'silver';
             }
-            c++;
             ctx.textAlign = "right";
             if(this.movesBlack.length > i){
                 ctx.fillText(this.movesBlack[i].padEnd(4), x + 200 - 20, y + 25 + 25 * (i - this.scroll));
@@ -354,22 +450,24 @@ function createDescription(x, y, width, height){
         ctx.font="Bold 10px arial";
 
         ctx.fillStyle = '#505050';
-        ctx.strokeText(this.opening.substr(0, 32) + "...", x + 10 + 2, y + 20 + 2);
+        ctx.strokeText(this.opening.substr(0, 32) + "...", x + 10 + 2, y + 70 + 2);
 
         ctx.fillStyle = 'white';
-        ctx.fillText(this.opening.substr(0, 32) + "...", x + 10, y + 20);
+        ctx.fillText(this.opening.substr(0, 32) + "...", x + 10, y + 70);
+
+
+        ctx.font="Bold 20px arial";
+        ctx.fillStyle = '#505050';
+        ctx.strokeText("Best Move: " + this.moveRec, x + 10 + 2, y + 25 + 2);
+
+        ctx.fillStyle = 'white';
+        ctx.fillText("Best Move: " + this.moveRec, x + 10, y + 25);
 
         ctx.fillStyle = '#505050';
-        ctx.strokeText("Engine best move: " + this.moveRec, x + 10 + 2, y + 40 + 2);
+        ctx.strokeText("Evaluation: " + this.eval, x + 10 + 2, y + 50 + 2);
 
         ctx.fillStyle = 'white';
-        ctx.fillText("Engine best move: " + this.moveRec, x + 10, y + 40);
-
-        ctx.fillStyle = '#505050';
-        ctx.strokeText("Engine evaluation: " + this.eval, x + 10 + 2, y + 60 + 2);
-
-        ctx.fillStyle = 'white';
-        ctx.fillText("Engine evaluation: " + this.eval, x + 10, y + 60);
+        ctx.fillText("Evaluation: " + this.eval, x + 10, y + 50);
         //cutoff
         ctx.fillStyle = lineColor;
         ctx.fillRect(this.width - lineWidth+600, this.y, lineWidth, canvasHeight);
