@@ -39,6 +39,10 @@ def uciToAn1():
 def isMate():
     return cH.isMate(**request.args)
 
+@app.route('/isStalemate')
+def isStalemate():
+    return cH.isStalemate(**request.args)
+
 @app.route('/computerMove')
 def computerMove():
     return cH.getComputerMove(**request.args)

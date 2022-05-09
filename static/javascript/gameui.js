@@ -70,6 +70,8 @@ function makeMove(x, y){
         pieces.setPieces(fen);
         if($.ajax({type: "GET", url: '/isMate?fen='+fen, async: false}).responseText === "True"){
             gameState = 1;
+        }else if($.ajax({type: "GET", url: '/isStalemate?fen='+fen, async: false}).responseText === "True"){
+            gameState = 3;
         }else{
             playerColor = Math.abs(1 - playerColor);
         }
@@ -94,34 +96,36 @@ function startUI(color = 0, time = 10 * 60, increment = 5){
 
 function click(event){
     //When you click
-    if(playerColor == 0){
+    if(gameState == 0){
+        if(playerColor == 0){
 
-        for(let i = 0; i < pieces.whitePieces.length; i++){
-            if(pieces.whitePieces[i].realX <= event.pageX &&
-                pieces.whitePieces[i].realX + spaceSize > event.pageX &&
-                pieces.whitePieces[i].realY <= (event.pageY - 100) &&
-                pieces.whitePieces[i].realY + spaceSize > (event.pageY - 100)){
-                selected = pieces.whitePieces[i];
-                return;
+            for(let i = 0; i < pieces.whitePieces.length; i++){
+                if(pieces.whitePieces[i].realX <= event.pageX &&
+                    pieces.whitePieces[i].realX + spaceSize > event.pageX &&
+                    pieces.whitePieces[i].realY <= (event.pageY - 100) &&
+                    pieces.whitePieces[i].realY + spaceSize > (event.pageY - 100)){
+                    selected = pieces.whitePieces[i];
+                    return;
+                }
+            }
+            
+        }else if(playerColor == 1){
+            for(let i = 0; i < pieces.blackPieces.length; i++){
+                if(pieces.blackPieces[i].realX <= event.pageX &&
+                    pieces.blackPieces[i].realX + spaceSize > event.pageX &&
+                    pieces.blackPieces[i].realY <= (event.pageY - 100) &&
+                    pieces.blackPieces[i].realY + spaceSize > (event.pageY - 100)){
+                    selected = pieces.blackPieces[i];
+                    return;
+                }
             }
         }
-        
-    }else if(playerColor == 1){
-        for(let i = 0; i < pieces.blackPieces.length; i++){
-            if(pieces.blackPieces[i].realX <= event.pageX &&
-                pieces.blackPieces[i].realX + spaceSize > event.pageX &&
-                pieces.blackPieces[i].realY <= (event.pageY - 100) &&
-                pieces.blackPieces[i].realY + spaceSize > (event.pageY - 100)){
-                selected = pieces.blackPieces[i];
-                return;
-            }
+        if(selected == 0){
+            return;
         }
-    }
-    if(selected == 0){
-        return;
-    }
-    if(event.pageX < 600){
-        makeMove(Math.floor(event.pageX / spaceSize) + 1, 8 - Math.floor((event.pageY-100) / spaceSize));
+        if(event.pageX < 600){
+            makeMove(Math.floor(event.pageX / spaceSize) + 1, 8 - Math.floor((event.pageY-100) / spaceSize));
+        }
     }
 }
 
@@ -507,6 +511,10 @@ function createTimer(x, y, width, height, time, increment){
 
     this.decrement = function(t){
         this.time -= t;
+        if(this.time <= 0){
+            this.time = 0;
+            gameState = 2;
+        }
         //console.log(this.time);
     }
     //this.interval = setInterval(this.,20);
@@ -514,6 +522,11 @@ function createTimer(x, y, width, height, time, increment){
 
 function updateCanvas(){
     //console.log(gameState);
+    board.draw();
+    pieces.draw();
+    bg.draw();
+    timer.draw();
+    notation.draw();
     switch(gameState){
         case 0:
             if(selected != 0){
@@ -524,6 +537,13 @@ function updateCanvas(){
             if(playerColor == chosenColor){
                 timer.decrement(20 / 1000);
             }else if(computerMove == null){
+                if($.ajax({type: "GET", url: '/isMate?fen='+fen, async: false}).responseText === "True"){
+                    gameState = 1;
+                    break;
+                }else if($.ajax({type: "GET", url: '/isStalemate?fen='+fen, async: false}).responseText === "True"){
+                    gameState = 3;
+                    break;
+                }
                 computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&depth=0', async: false}).responseText;
             }else{
                 notation.addMove(computerMove, Math.abs(1-playerColor));
@@ -531,15 +551,93 @@ function updateCanvas(){
                 //console.log(fen);
                 pieces.setPieces(fen);
                 computerMove = null;
+                
                 playerColor = Math.abs(1 - playerColor);
+                if($.ajax({type: "GET", url: '/isMate?fen='+fen, async: false}).responseText === "True"){
+                    gameState = 1;
+                    break;
+                }
             }
             
             break;
-            
+        case 1://Checkmate
+            document.getElementById("result").innerHTML = "CHECKMATE!";
+            if(playerColor == chosenColor){
+                document.getElementById("result").innerHTML += " YOU WIN!";
+            }else{
+                document.getElementById("result").innerHTML += " YOU LOSE!";
+            }
+            break;
+        case 2://Timeout
+            document.getElementById("result").innerHTML = "TIMEOUT!";
+            if(insufficientMaterial(playerColor)){
+                document.getElementById("result").innerHTML += " DRAW DO TO INSUFFICIENT MATERIAL!";
+            }else{
+                document.getElementById("result").innerHTML += " YOU LOSE!";
+            }
+            break;
+        case 3://Stalemate
+            document.getElementById("result").innerHTML = "STALEMATE!";
+            break;
     }
-    board.draw();
-    pieces.draw();
-    bg.draw();
-    timer.draw();
-    notation.draw();
+    
+}
+
+function insufficientMaterial(pc){
+    knight = false;
+    bishop = false;
+    if(pc == 0){
+        for(i = 0; i < pieces.blackPieces.length; i++){
+            if(i.type === "pawn"){
+                return true;
+            }
+            if(i.type === "rook"){
+                return true;
+            }
+            if(i.type === "queen"){
+                return true;
+            }
+            if(i.type === "knight"){
+                if(knight || bishop){
+                    return true;
+                }
+                knight = true;
+                continue;
+            }
+            if(i.type === "bishop"){
+                if(knight || bishop){
+                    return true;
+                }
+                bishop = true;
+                continue;
+            }
+        }
+    }else if(pc == 1){
+        for(i = 0; i < pieces.whitePieces.length; i++){
+            if(i.type === "pawn"){
+                return true;
+            }
+            if(i.type === "rook"){
+                return true;
+            }
+            if(i.type === "queen"){
+                return true;
+            }
+            if(i.type === "knight"){
+                if(knight || bishop){
+                    return true;
+                }
+                knight = true;
+                continue;
+            }
+            if(i.type === "bishop"){
+                if(knight || bishop){
+                    return true;
+                }
+                bishop = true;
+                continue;
+            }
+        }
+    }
+    return false;
 }

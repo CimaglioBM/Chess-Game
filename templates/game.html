@@ -41,23 +41,16 @@
     <main>
         <div class="main">
             <div id=canvas>
-                <body onload="startUI()">
+                <!--For color, 0 = white, 1 = black 
+                    time and increment are both in seconds
+                -->
+                <body onload="startUI(color = 0, time = 60, increment = 0)">
                     <script src="{{url_for('static', filename='javascript/gameui.js')}}"></script>
                 </body>
             </div>
         </div>
-        <div class="side">
-            <h2>
-                Moves
-            </h2>
-            <p>
-                <br>
-               A Log of moves that have been made?
+        <div class="side" id = "result"><!--I made this div display the result for testing. Feel free to change where the result of a game is displayed on the page by changing what elements have id = "result"-->
             
-    
-                <br>
-    
-            </p>
         </div>
     </main>
 

@@ -21,6 +21,7 @@ def isMate(fen):
     else:
         return "False"
 
+
 def getNewFenSan(fen, san):
     b = chess.Board(fen)
     b.push_san(san)
@@ -31,6 +32,7 @@ def getNewFenUci(fen, uci):
     b.push_uci(uci)
     return b.fen()
 
+
 def getFenMoveStr(movestr):
     moveList = movestr.split(",")
     b = chess.Board()
@@ -40,6 +42,13 @@ def getFenMoveStr(movestr):
             break
         b.push_san(a)
     return b.fen()
+
+def isStalemate(fen):
+    b = chess.Board(fen)
+    if(b.is_stalemate()):
+        return "True"
+    else:
+        return "False"
 
 def uciToAn0(fen, moveStart, moveEnd):
     b = chess.Board(fen)
