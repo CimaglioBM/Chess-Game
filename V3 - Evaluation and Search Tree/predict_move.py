@@ -14,7 +14,7 @@
 #local libraries
 from create_model import *
 from get_move_WHITE import *
-#from get_move_BLACK import *
+from get_move_BLACK import *
 
 import chess
 import sys

@@ -83,6 +83,7 @@ function makeMove(x, y){
 
 
 function startUI(color = 0, time = 10 * 60, increment = 5){
+    chosenColor = color;
     gameCanvas.start();
     board=new createBoard();
     pieces=new createPieces();
@@ -124,7 +125,11 @@ function click(event){
             return;
         }
         if(event.pageX < 600){
-            makeMove(Math.floor(event.pageX / spaceSize) + 1, 8 - Math.floor((event.pageY-100) / spaceSize));
+            if(chosenColor == 0){
+                makeMove(Math.floor(event.pageX / spaceSize) + 1, 8 - Math.floor((event.pageY-100) / spaceSize));
+            }else{
+                makeMove(Math.floor(event.pageX / spaceSize) + 1, 1 + Math.floor((event.pageY-100) / spaceSize));
+            }
         }
     }
 }
@@ -271,7 +276,11 @@ function createPawn(x,y,color){
     this.y=y;
     this.color=color;
     this.realX=(x-1)*spaceSize;
-    this.realY=canvasHeight-y*spaceSize;
+    if(chosenColor == 0){
+        this.realY=canvasHeight-y*spaceSize;
+    }else{
+        this.realY=(y-1)*spaceSize;
+    }
     this.type = "pawn";
     this.img = new Image();
     if(color==='white'){
@@ -291,7 +300,11 @@ function createKnight(x,y,color){
     this.y=y;
     this.color=color;
     this.realX=(x-1)*spaceSize;
-    this.realY=canvasHeight-y*spaceSize;
+    if(chosenColor == 0){
+        this.realY=canvasHeight-y*spaceSize;
+    }else{
+        this.realY=(y-1)*spaceSize;
+    }
     this.type = "knight";
     this.img = new Image();
     if(color==='white'){
@@ -310,7 +323,11 @@ function createBishop(x,y,color){
     this.y=y;
     this.color=color;
     this.realX=(x-1)*spaceSize;
-    this.realY=canvasHeight-y*spaceSize;
+    if(chosenColor == 0){
+        this.realY=canvasHeight-y*spaceSize;
+    }else{
+        this.realY=(y-1)*spaceSize;
+    }
     this.type = "bishop";
     this.img = new Image();
     if(color==='white'){
@@ -330,7 +347,11 @@ function createRook(x,y,color){
     this.y=y;
     this.color=color;
     this.realX=(x-1)*spaceSize;
-    this.realY=canvasHeight-y*spaceSize;
+    if(chosenColor == 0){
+        this.realY=canvasHeight-y*spaceSize;
+    }else{
+        this.realY=(y-1)*spaceSize;
+    }
     this.type = "rook";
     this.img = new Image();
     if(color==='white'){
@@ -349,7 +370,11 @@ function createQueen(x,y,color){
     this.y=y;
     this.color=color;
     this.realX=(x-1)*spaceSize;
-    this.realY=canvasHeight-y*spaceSize;
+    if(chosenColor == 0){
+        this.realY=canvasHeight-y*spaceSize;
+    }else{
+        this.realY=(y-1)*spaceSize;
+    }
     this.type = "queen";
     this.img = new Image();
     if(color==='white'){
@@ -369,7 +394,11 @@ function createKing(x,y,color){
     this.y=y;
     this.color=color;
     this.realX=(x-1)*spaceSize;
-    this.realY=canvasHeight-y*spaceSize;
+    if(chosenColor == 0){
+        this.realY=canvasHeight-y*spaceSize;
+    }else{
+        this.realY=(y-1)*spaceSize;
+    }
     this.type = "king";
     this.img = new Image();
     if(color==='white'){
@@ -405,7 +434,7 @@ function createBoard(){
         ctx.fillStyle = '#eab676';
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if((i+j)%2==0){ctx.fillRect(i*spaceSize,j*spaceSize,spaceSize,spaceSize);}
+                if((i+j)%2==chosenColor){ctx.fillRect(i*spaceSize,j*spaceSize,spaceSize,spaceSize);}
             }
         }
     }
