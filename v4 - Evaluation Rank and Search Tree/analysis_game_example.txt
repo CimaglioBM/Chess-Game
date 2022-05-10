@@ -1,0 +1,12 @@
+c2c4               (actual move)
+c2c3               ('best' move)
++                  (evaluation)
+e7e6               (engine's played move) - doesn't matter, either way if they used 'easy' we want to see what 'hard' would have done, right?
+e7e6               ('best' move)
+++                 (evaluation)
+
+The above continues until checkmate. There won't be anything at the
+end which shows end of file, just an empty line with a line break
+only. If that doesn't work, I can put something like this:
+
+END

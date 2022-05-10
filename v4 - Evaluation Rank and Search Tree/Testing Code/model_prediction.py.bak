@@ -1,0 +1,92 @@
+#Test the model predictions, see how they line up with the actual data
+# the accuracy is so poor, I have to assume it's relatively accurate but reported to be poor
+
+import chess
+import sys
+import tensorflow as tf
+import numpy as np
+import csv
+import matplotlib.pyplot as plt
+
+
+from ../parse_board import *
+from ../create_model import *
+
+DATA_SIZE = 5
+
+def CSVtoDataset(path):
+    print("CSV to board time")
+    
+    X = []
+    Y = []
+    
+    with open(path, newline='') as data_file:
+        reader = csv.reader(data_file)
+        
+        #print the header of the file, then continue
+        for the_first in reader:
+            print("File Header: ",the_first)
+            break
+
+        counter=0
+        for fen, evaluation in reader:
+            if counter == DATA_SIZE:
+                break
+            counter+=1
+            
+            board_mat = FENtoBoard(fen)
+            
+            
+            while (not evaluation[0].isnumeric()):
+                evaluation = evaluation[1:]
+            
+            X.append(board_mat)
+            Y.append(int(evaluation))
+            
+
+    X = np.asarray(X)
+    X = np.expand_dims(X, axis=-1)
+    
+    Y = np.asarray(Y)
+
+    print()
+    print("Done with CSV to board!")
+    return X, Y
+
+
+def main(args):
+
+    print("start")
+
+    data_path = "../Training_Data/chessData.csv"
+    
+    # load the csv, and translate everything to a dataset of boards and evaluations
+    boards, evaluations = CSVtoDataset(data_path)
+    #X, Y
+
+    model = createModel()
+    model.load_weights('../Output/model_weights.h5')
+
+    
+    for i in range(DATA_SIZE):
+        board = boards[i]
+        #parse the board to model format
+        parsed_board = BoardtoNumeric(board)
+
+        #predict on parsed board
+        prediction = model.predict(parsed_board)
+
+        print("Iteration:", i)
+        print("Actual")
+        print(board)
+        print(evaluations[i])
+        print()
+        print("Predicted evaluation:", prediction)
+        print()
+
+
+    #End of main
+
+if __name__ == '__main__':
+    main(sys.argv)
+

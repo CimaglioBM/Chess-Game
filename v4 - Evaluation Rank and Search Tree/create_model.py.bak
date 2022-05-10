@@ -1,0 +1,20 @@
+#///////////////////////////////////////////////#
+#
+# create the model
+#
+#///////////////////////////////////////////////#
+from tensorflow.keras.layers import Conv2D,Dense,Flatten
+from tensorflow.keras.models import Sequential
+
+def createModel():
+    model = Sequential()
+
+    model.add(Conv2D(64, 2,input_shape = (8,8,1)))
+    model.add(Conv2D(32, 2))
+    #model.add(Dense(10))
+    model.add(Flatten())
+    model.add(Dense(1, activation="linear"))
+
+    #print(model.summary())
+    return model 
+
