@@ -15,6 +15,7 @@ from create_model import *
 from get_move_WHITE import *
 from get_move_BLACK import *
 
+#not to be used anymore
 def getGameMoves(path):
     board = chess.Board()
     file = open(path, 'r')
@@ -92,8 +93,8 @@ def performAnalysis(moves, path):
     #send the information to the file (and overwrite the existing info)
     file = open(path, 'w')
     for i in range(len(moves)):
-        file.writelines(moves[i] + '\n')
-        file.writelines(str(reccommended[i]) + '\n')
+        file.writelines(moves[i] + ',')
+        file.writelines(str(reccommended[i]) + ',')
         file.writelines(analysis[i] + '\n')
     
     file.close()    
@@ -101,15 +102,16 @@ def performAnalysis(moves, path):
     #End of performAnalysis
 
 
-def main(args):
+def generateAnalysisFile(args):
 
     print("Begin analysis generation")
 
-    game = sys.argv[1]    
+    game = sys.argv[1]
+    game_path = sys.argv[2]
 
 #    game_moves = getGameMoves(game_path)
     game_moves = game.split(",")
-    
+        
     print(game_moves)
     
     performAnalysis(game_moves, game_path)    
@@ -118,6 +120,6 @@ def main(args):
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    generateAnalysisFile(sys.argv)
     print("done")
 
