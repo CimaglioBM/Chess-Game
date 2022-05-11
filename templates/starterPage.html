@@ -42,25 +42,25 @@
     <main>
         <div id = "body">
             <h2> Would you like to Play A Game?</h2>
-            <form>
+            <form method="get" action="/game">
                 <h3>Select the Difficulty</h3> 
                 
-                <input type="radio" id="Easy" name="difficulty" value="Easy" checked = checked>
+                <input type="radio" id="Easy" name="difficulty" value="0" checked = checked>
                 <label for="Easy"> Easy</label>
                        
-                <input type="radio" id="Medium" name="difficulty" value="Medium">
+                <input type="radio" id="Medium" name="difficulty" value="1">
                 <label for="Medium">Medium</label>
                        
-                <input type="radio" id="Hard" name="difficulty" value="Hard">
+                <input type="radio" id="Hard" name="difficulty" value="2">
                 <label for="Hard"> Hard </label>
                      
                 
                 <h3> Select which color you wish to play as </h3>
                    
-                <input type="radio" id="white" name="color" value="white" checked = checked>
+                <input type="radio" id="white" name="color" value="0" checked = checked>
                 <label for="white">White</label>
                        
-                <input type="radio" id="black" name="color" value="black">
+                <input type="radio" id="black" name="color" value="1">
                 <label for="black">Black</label>
 
                    
@@ -69,10 +69,10 @@
                 <input type="radio" id="None" name="time" value="None" checked = checked>
                 <label for="None">None</label>
                        
-                <input type="radio" id="1 Minute" name="time" value="1 Minute">
+                <input type="radio" id="1 Minute" name="time" value="60">
                 <label for="1 Minute">1 Minute</label>
                        
-                <input type="radio" id="5 Minute" name="time" value="5 Minute">
+                <input type="radio" id="5 Minute" name="time" value="300">
                 <label for="5 Minute">5 Minute</label>
                    
             

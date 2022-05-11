@@ -63,13 +63,13 @@ def make():
             os.mkdir(path)
             return render_template('/home.html')
     
-@app.route('/starterPage.html')
+@app.route('/starterPage')
 def startgame():
     return render_template('starterPage.html')
 
-@app.route('/game.html')
+@app.route('/game')
 def game():
-    return render_template('/game.html')
+    return render_template('/game.html', **request.args)
 
 @app.route('/analysisBoard.html')
 def analysis():

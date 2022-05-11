@@ -17,6 +17,7 @@ var selected = 0;
 var chosenColor = 0;
 var fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 var computerMove = null;
+var difficulty = 0;
 //white: playerColor = 0
 //black: playerColor = 1
 var playerColor = 0;
@@ -82,7 +83,8 @@ function makeMove(x, y){
 
 
 
-function startUI(color = 0, time = 10 * 60, increment = 5){
+function startUI(color = 0, time = 10 * 60, difficulty=0, increment = 5){
+    //difficulty = difficulty;
     chosenColor = color;
     gameCanvas.start();
     board=new createBoard();
@@ -575,7 +577,7 @@ function updateCanvas(){
                 }
                 computerMove = "";
             }else{
-                computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&color='+Math.abs(1 - playerColor) + '&depth=0', async: false}).responseText;
+                computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&color='+Math.abs(1 - playerColor) + '&depth=' + String(difficulty), async: false}).responseText;
                 computerMove = $.ajax({type: "GET", url: '/uciToAn1?fen='+fen+'&san='+computerMove, async: false}).responseText;
                 notation.addMove(computerMove, Math.abs(1-playerColor));
                 fen = $.ajax({type: "GET", url: '/getNewFenSan?fen='+fen+'&san='+computerMove, async: false}).responseText;

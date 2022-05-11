@@ -44,7 +44,8 @@
                 <!--For color, 0 = white, 1 = black 
                     time and increment are both in seconds
                 -->
-                <body onload="startUI(color = 1, time = 60, increment = 0)">
+                {% set uistring = "startUI(" + "0" + "," + time + "," + difficulty + ")" %}
+                <body onload="{{uistring}}">
                     <script src="{{url_for('static', filename='javascript/gameui.js')}}"></script>
                 </body>
             </div>
