@@ -40,50 +40,37 @@
     </header>
 
     <main>
-        <div class="main">
-            <h2>
-                Would you like to play a game?
-                <br>
-            </h2>
-            <h3>Select the Difficulty</h3>
+        <div id = "body">
+            <h2> Would you like to Play A Game?</h2>
+            <form>
+                <h3>Select the Difficulty</h3> 
+                
+                <input type="radio" id="Easy" name="difficulty" value="Easy" checked = checked>
+                <label for="Easy"> Easy</label>
+                       
+                <input type="radio" id="Medium" name="difficulty" value="Medium">
+                <label for="Medium">Medium</label>
+                       
+                <input type="radio" id="Hard" name="difficulty" value="Hard">
+                <label for="Hard"> Hard </label>
+                     
+                
+                <h3> Select which color you wish to play as </h3>
+                   
+                <input type="radio" id="white" name="color" value="white" checked = checked>
+                <label for="white">White</label>
+                       
+                <input type="radio" id="black" name="color" value="black">
+                <label for="black">Black</label>
+                   
             
-        
-            <div class="buttons">
-                <ul class="difficulty">
-                    <li>
-                      <input type="radio" id="easy" name="difficulty" checked="checked" />
-                      <label for="easy"><h2>Easy</h2></label>
-                    </li>
-                    <li>
-                      <input type="radio" id="medium" name="difficulty" />
-                      <label for="medium"><h2>Medium</h2></label>
-                    </li>
-                    <li>
-                      <input type="radio" id="Hard" name="difficulty" />
-                      <label for="Hard"><h2>Hard</h2></label>
-                    </li>
-                    
-                  </ul>
-            </div>
-            <h3>Choose Which Side To Play As!</h3>
-            <div class="buttons">
-                <ul class="difficulty">
-                  <li>
-                    <input type="radio" id="White" name="side-Selection" checked="checked" />
-                    <label for="White"><h2>White</h2></label>
-                  </li>  
-                  <li>
-                      <input type="radio" id="Black" name="side-Selection" />
-                      <label for="Black"><h2>Black</h2></label>
-                  </li>  
-                  </ul>
-            </div>
-
-            <div>
-              <h2>Ready?</h2>
-              <button><h2>Lets Go!</h2></button>
-            </div>
+                  <div>
+                    <h3>
+                        Ready?
+                    </h3>
+                  <button type="submit"><h3> PLAY </h3></button>
+                </div>
+              </form>
         </div>
     </main>
 </body>
-
