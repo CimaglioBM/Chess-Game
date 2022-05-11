@@ -57,8 +57,11 @@ def make():
         directory = request.form['account']
         par = request.form['path']
         path = os.path.join(par, directory)
-        os.mkdir(path)
-        return render_template('/home.html')
+        if os.path.isdir(path):
+            return render_template('/home.html')
+        else:
+            os.mkdir(path)
+            return render_template('/home.html')
     
 @app.route('/starterPage.html')
 def startgame():
