@@ -56,9 +56,9 @@ def updateBoardFile(game_path, next_move):
 
 def readInputs(args):
     print("reading inputs")
-    game = sys.argv[1]
-    depth = int(sys.argv[2])
-    white = int(sys.argv[3])
+    game = argv[1]
+    depth = int(argv[2])
+    white = int(argv[3])
     
     game_moves = game.split(",")
     
@@ -82,7 +82,7 @@ def getNextMove(board, depth, white):
         return get_next_move_BLACK(board, depth)
     #End of getNextMove
 
-def get_predicted_fen(args):
+def get_predicted_move(args):
 
     #tf.get_logger().setLevel('INFO')
 
@@ -124,10 +124,10 @@ def get_predicted_fen(args):
     #updateBoardFile(path, next_move)
     
     print("done!")
-    return board.fen(), next_move
+    return next_move
 
 
-if __name__ == '__main__':
-    fen, next_move = get_predicted_fen(sys.argv)
-    print(next_move)
-    sys.exit()
+#if __name__ == '__main__':
+#    next_move = get_predicted_fen(sys.argv)
+#    print(next_move)
+
