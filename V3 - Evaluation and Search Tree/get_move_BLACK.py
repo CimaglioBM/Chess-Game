@@ -80,7 +80,7 @@ def get_score(board, depth, curr):
 
 
 #Y()
-def get_next_move_WHITE(state, depth=3):
+def get_next_move_BLACK(state, depth=3):
     print("Depth to search:", depth)
     original_board = chess.Board(state)
     #get the legal moves

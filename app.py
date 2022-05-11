@@ -34,7 +34,6 @@ def uciToAn0():
 def uciToAn1():
     return cH.uciToAn1(**request.args)
 
-
 @app.route('/isMate')
 def isMate():
     return cH.isMate(**request.args)

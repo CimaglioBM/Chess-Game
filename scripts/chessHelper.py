@@ -1,5 +1,5 @@
 import chess
-import random
+from scripts.Back_End.predict_move import *
 
 def moveLegal(fen, moveStart, moveEnd):
     b = chess.Board(fen)
@@ -58,11 +58,8 @@ def uciToAn1(fen, san):
     b = chess.Board(fen)
     return b.san(chess.Move.from_uci(san))
 
-def getComputerMove(fen, depth):
+def getComputerMove(fen = "", color = 1, depth = 0):
     b = chess.Board(fen)
-    legal_moves = str(b.legal_moves)[38:-2].replace(',','').split()
     
-    #move_index = random.randint(0,len(legal_moves))
-    #print(legal_moves[0])
-    return legal_moves[0]
+    return get_predicted_move(b, depth, color)
     

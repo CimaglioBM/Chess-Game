@@ -8,8 +8,8 @@
 # Author - Connor Kamrowski
 # 
 
-from parse_board import *
-from create_model import *
+from scripts.Back_End.parse_board import *
+from scripts.Back_End.create_model import *
 
 import chess
 import sys

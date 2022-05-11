@@ -8,8 +8,8 @@
 # Author - Connor Kamrowski
 # 
 
-from parse_board import *
-from create_model import *
+from scripts.Back_End.parse_board import *
+from scripts.Back_End.create_model import *
 
 import chess
 import sys
@@ -88,7 +88,7 @@ def get_next_move_WHITE(state, depth=3):
 
     #load the model (hard code this path, it will never change)
     model = createModel()
-    model.load_weights("Output/model_weights.h5")
+    model.load_weights("scripts/Back_End/Output/model_weights.h5")
     
     #for each LM
     for i in range(len(legal_moves)):

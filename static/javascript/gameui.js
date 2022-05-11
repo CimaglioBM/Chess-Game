@@ -573,8 +573,10 @@ function updateCanvas(){
                     gameState = 3;
                     break;
                 }
-                computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&depth=0', async: false}).responseText;
+                computerMove = "";
             }else{
+                computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&color='+Math.abs(1 - playerColor) + '&depth=0', async: false}).responseText;
+                computerMove = $.ajax({type: "GET", url: '/uciToAn1?fen='+fen+'&san='+computerMove, async: false}).responseText;
                 notation.addMove(computerMove, Math.abs(1-playerColor));
                 fen = $.ajax({type: "GET", url: '/getNewFenSan?fen='+fen+'&san='+computerMove, async: false}).responseText;
                 //console.log(fen);

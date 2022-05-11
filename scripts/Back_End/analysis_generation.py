@@ -11,9 +11,9 @@ import numpy as np
 import csv
 
 #local files included
-from create_model import *
-from get_move_WHITE import *
-from get_move_BLACK import *
+from scripts.Back_End.create_model import *
+from scripts.Back_End.get_move_WHITE import *
+from scripts.Back_End.get_move_BLACK import *
 
 #not to be used anymore
 def getGameMoves(path):

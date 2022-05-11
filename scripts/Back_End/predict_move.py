@@ -12,9 +12,9 @@
 
 
 #local libraries
-from create_model import *
-from get_move_WHITE import *
-from get_move_BLACK import *
+from scripts.Back_End.create_model import *
+from scripts.Back_End.get_move_WHITE import *
+from scripts.Back_End.get_move_BLACK import *
 
 import chess
 import sys
@@ -82,7 +82,9 @@ def getNextMove(board, depth, white):
         return get_next_move_BLACK(board, depth)
     #End of getNextMove
 
-def get_predicted_move(board, int(depth), int(white)):
+def get_predicted_move(board, depth, white):
+    depth = int(depth)
+    white = int(white)
 
     #tf.get_logger().setLevel('INFO')
 
