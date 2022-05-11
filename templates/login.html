@@ -40,24 +40,17 @@
 </header>
 <main>
   <div class="main">
-      <h2>
-          Welcome, please select an option
-          <br>
-      </h2>
-    <div class="strt">
 
-      <div class="strtex">
-        <a href="starterPage.html">Play a New Game of Chess</a>
-      </div>
-
-      <br>
-
-      <div class="strtex">
-        <a href="analysisBoard.html">Analize a Previous Game of Chess</a>
-      </div>
-
+    <form action='/home' method='POST'>
+      <label for="account">Enter Account Name:</label>
+      <input type="text" id="account" name="account">
+      <label for="path">Enter path:</label>
+      <input type="text" id="path" name="path">
+      <input type="submit" value="done">
+      
+  </form>
     
-    </div>
+  </div>
 
     
 </body>

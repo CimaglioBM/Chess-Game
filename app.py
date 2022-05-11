@@ -2,6 +2,7 @@ from distutils.log import debug
 from flask import Flask, render_template, request
 
 import scripts.chessHelper as cH
+import os
 
 
 app = Flask(__name__)
@@ -48,8 +49,17 @@ def computerMove():
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('login.html')
 
+@app.route('/home', methods = ['POST'])
+def make():
+    if request.method == "POST":
+        directory = request.form['account']
+        par = request.form['path']
+        path = os.path.join(par, directory)
+        os.mkdir(path)
+        return render_template('/home.html')
+    
 @app.route('/starterPage.html')
 def startgame():
     return render_template('starterPage.html')
@@ -65,6 +75,6 @@ def analysis():
 @app.route('/home.html')
 def back():
     return render_template('home.html')
-    
+
 if __name__ == '__main__':
     app.run(debug=True)
