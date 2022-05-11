@@ -82,7 +82,7 @@ def getNextMove(board, depth, white):
         return get_next_move_BLACK(board, depth)
     #End of getNextMove
 
-def get_predicted_move(args):
+def get_predicted_move(board, int(depth), int(white)):
 
     #tf.get_logger().setLevel('INFO')
 
@@ -99,7 +99,7 @@ def get_predicted_move(args):
 #        white = 0
 
 #    board = readBoard(path)
-    board, depth, white = readInputs(args)
+#    board, depth, white = readInputs(args)
     
     #get the next move as a chess.move object
     uci_move,score = getNextMove(board.epd(), depth, white)
