@@ -19,6 +19,15 @@ header, .navbar {
     background-color: transparent;
 }
 
+a{
+    color: white;
+    text-decoration: none;
+}
+
+a:visited{
+    color: white;
+}
+
 header {
     grid-area: header;
     display: flex;
