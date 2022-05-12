@@ -508,11 +508,15 @@ function createBackground(){
 }
 
 function createTimer(x, y, width, height, time, increment){
+    this.notime = false;
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.time = time;
+    if(time == -1){
+        this.notime = true;
+    }
     this.increment = increment;
     
 
@@ -532,19 +536,22 @@ function createTimer(x, y, width, height, time, increment){
 
         ctx.textAlign = "right";
         ctx.font="Bold 60px arial";
+        if(!this.notime){
+            ctx.fillStyle = 'silver';
+            ctx.fillText(this.minString + ":" + ("0" + this.secString).slice(-2), x + this.width * 0.9, y + this.height * 0.7);
 
-        ctx.fillStyle = 'silver';
-        ctx.fillText(this.minString + ":" + ("0" + this.secString).slice(-2), x + this.width * 0.9, y + this.height * 0.7);
-
-        ctx.strokeStyle = '#505050';
-        ctx.strokeText(this.minString + ":" + ("0" + this.secString).slice(-2), x + this.width * 0.9, y + this.height * 0.7);
+            ctx.strokeStyle = '#505050';
+            ctx.strokeText(this.minString + ":" + ("0" + this.secString).slice(-2), x + this.width * 0.9, y + this.height * 0.7);
+        }
     }
 
     this.decrement = function(t){
-        this.time -= t;
-        if(this.time <= 0){
-            this.time = 0;
-            gameState = 2;
+        if(!this.notime){
+            this.time -= t;
+            if(this.time <= 0){
+                this.time = 0;
+                gameState = 2;
+            }
         }
         //console.log(this.time);
     }
