@@ -11,15 +11,16 @@
 from scripts.Back_End.parse_board import *
 from scripts.Back_End.create_model import *
 
-import os
 import chess
 import sys
 import random
 import tensorflow as tf
 import numpy as np
+import random
+import os
 
 #Constants
-CHECKMATE_PRIORITY = -50
+
 
 #eval()
 def pred_eval(model, board):
@@ -35,50 +36,101 @@ def pred_eval(model, board):
     board_for_model = np.expand_dims(board_for_model, axis=-1)
 
     #predict on parsed board
-    prediction = model.predict(board_for_model)
-
-    randomness = random.randint(1,5)
+    prediction = model.predict(board_for_model)[0]
     
-    return prediction[0]
+    #multi-class prediction handling
+    pred_class = 0
+        
+    for i in range(len(prediction)):
+        if prediction[i] > prediction[pred_class]:
+            pred_class = i
+        
+    pred_class += 1
+
+    randomness = (random.randint(1,10)-5)/20
+    
+    if pred_class + randomness > 5 or pred_class < 0.5:
+        varied_pred = pred_class - randomness
+    else:
+        varied_pred = pred_class + randomness
+    
+    return varied_pred
     #End of pred_eval
     
 
-#X()
-def get_score(board, depth, curr):
-    #get the legal moves
+def get_initial_layer_move(board, model, simple=1):
     legal_moves = list(board.legal_moves)
-    score = []
-    if curr >= depth:
-        #print(board.fen())
-        #print()
-        #print(legal_moves)
-        for move in legal_moves:
-            last_board = chess.Board(board.fen())
+    if simple:
+        best_move = legal_moves[0]
+        score = 100
+        for each in legal_moves:
+            board_copy = chess.Board(board.fen())
+            board_copy.push(each)
 
-            last_board.push(move)
+            curr_score = pred_eval(model, board_copy)#model.predict(processed_board)
 
-            #evaluation = pred_eval(last_board)
+            if curr_score < score:
+                best_move = each
+                score = curr_score
+        return best_move, score
+    else:
+        moves = []
+        scores = []
+        for each in legal_moves:
+            board_copy = chess.Board(board.fen())
+            board_copy.push(each)
             
-            score.append(board)
-            #print("score")
+            processed_board = BoardtoNumeric(board_copy)
+            
+            curr_score = pred_eval(model, board_copy)#model.predict(processed_board)
+            
+            moves.append(each)
+            scores.append(curr_score)
+            
+        moves = np.asarray(moves)
+        scores = np.asarray(scores)
+        if len(moves) > 5:
+            scores_indexes = scores.argsort()
+            #scores = scores[scores_indexes[0:5]]
+            moves = moves[scores_indexes[0:5]]
 
+        return moves
+
+
+def evaluate_some_moves(board, model, simple=1):
+    legal_moves = list(board.legal_moves)
+
+    #look at no more than ten of the moves
+    if len(legal_moves) > 10:
+        legal_moves = legal_moves[0:10]
+
+    if simple:
+        score = 0
+        for each in legal_moves:
+            board_copy = chess.Board(board.fen())
+            board_copy.push(each)
+            
+            score += pred_eval(model, board_copy)#model.predict(processed_board)
+        
+        #get the average score across the moves
+        score = score/len(legal_moves)
         return score
-    else: #keep searching the tree!
-        curr += 1
-        for move in legal_moves:
-            next_board = chess.Board(board.fen())
-            next_board.push(move)
-            if next_board.is_checkmate():
-                score.append(CHECKMATE_PRIORITY)
-            else:
-                score = score + get_score(next_board, depth, curr)
+    else:
+        score = 0
+        for each in legal_moves:
+            board_copy = chess.Board(board.fen())
+            board_copy.push(each)
+            
+            score += evaluate_some_moves(board_copy, model)
+        
+        #get the average score across the moves
+        score = score/len(legal_moves)
         return score
-    
-    #End of get_score
+
 
 #Y()
-def get_next_move_BLACK(state, depth=3):
-    print("Depth to search:", depth)
+def get_next_move_BLACK(state, diff=2):
+    print("Difficulty:", diff)
     original_board = chess.Board(state)
     #get the legal moves
     legal_moves = list(original_board.legal_moves)
@@ -88,32 +140,51 @@ def get_next_move_BLACK(state, depth=3):
     #load the model (hard code this path, it will never change)
     model = createModel()
     model.load_weights(os.getcwd()+"\scripts\Back_End\Output\model_weights.h5")
-    
-    #for each LM
-    for i in range(len(legal_moves)):
-        LM = legal_moves[i]
-        board = chess.Board(original_board.fen())
-        board.push(LM)
-        if board.is_checkmate():
-            return (LM, -99999)#the game is won, this next move creates checkmate
+        
+    if diff == 0 or diff > 2: #don't allow any difficulty over hard, stick them at easy
+        move, score = get_initial_layer_move(original_board, model)
+        return move, score
 
-        LM_outcomes = get_score(board, depth, 1)
-        
-        LM_score = 0
-        for each in LM_outcomes:
-            LM_score += pred_eval(model, each)
-        
-        scores.append( (LM, LM_score) )
-        #end for loop
-    
-    best = scores[0]
-    
-    for move, score in scores:
-        if score < best[1]:
-            best = (move, score)
-        #end for loop
-        
-    print("The best move:", best[0], best[1])
+        #End of easy
+    elif diff == 1:
+        print("diff is normal")
+        best_moves = get_initial_layer_move(original_board, model, 0)
+        best_move = best_moves[0]
+        best_score = 100
+        for i in range(len(best_moves)):
+            #get the current board
+            curr_board = chess.Board(original_board.fen())
+            #push the current move
+            curr_board.push(best_moves[i])
+            #get the score of this path
+            current_score = evaluate_some_moves(curr_board, model)
+            
+            #if the score of this path is better, set this to best move
+            if current_score < best_score:
+                best_score = current_score
+                best_move = best_moves[i]
 
-    return best
+        return best_move, best_score
+        #End of normal
+    else:
+        best_moves = get_initial_layer_move(original_board, model, 0)
+        best_move = best_moves[0]
+        best_score = 100
+        for i in range(len(best_moves)):
+            #get the current board
+            curr_board = chess.Board(original_board.fen())
+            #push the current move
+            curr_board.push(best_moves[i])
+            #get the score of this path
+            current_score = evaluate_some_moves(curr_board, model, 0)
+            
+            #if the score of this path is better, set this to best move
+            if current_score < best_score:
+                best_score = current_score
+                best_move = best_moves[i]
+
+        return best_move, best_score
+        #End of hard
+
     #End of get_next_move
+

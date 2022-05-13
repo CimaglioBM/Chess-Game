@@ -22,6 +22,14 @@ import random
 import tensorflow as tf
 import numpy as np
 
+eval_dict = {
+    1:"--",
+    2:"-",
+    3:"0",
+    4:"+",
+    5:"++",
+}
+
 
 #not to be used anymore
 def readBoard(game_path):
@@ -75,16 +83,14 @@ def readInputs(args):
     return board, depth, white
     #End of readInputs
 
-def getNextMove(board, depth, white):
+def getNextMove(board, diff, white):
     if white:
-        return get_next_move_WHITE(board, depth)
+        return get_next_move_WHITE(board, diff)
     else:
-        return get_next_move_BLACK(board, depth)
+        return get_next_move_BLACK(board, diff)
     #End of getNextMove
 
-def get_predicted_move(board, depth, white):
-    depth = int(depth)
-    white = int(white)
+def get_predicted_move(board, diff, white):
 
     #tf.get_logger().setLevel('INFO')
 
@@ -102,9 +108,9 @@ def get_predicted_move(board, depth, white):
 
 #    board = readBoard(path)
 #    board, depth, white = readInputs(args)
-    
+
     #get the next move as a chess.move object
-    uci_move,score = getNextMove(board.epd(), depth, white)
+    uci_move,score = getNextMove(board.epd(), int(diff), int(white))
     
     #print the move
     print("Move:", uci_move)
@@ -118,15 +124,23 @@ def get_predicted_move(board, depth, white):
         print("Something was wrong with the predicted move. Quitting...")
         sys.exit()
     
-    print("Board:")
-    print(board)
-    print(board.fen())
-    print("Move:", next_move)
+    #print("Board:")
+    #print(board)
+    #print(board.fen())
+    #print("Move:", next_move)
 
     #updateBoardFile(path, next_move)
     
-    print("done!")
-    return str(score) + '*' + next_move
+    print("*****************")
+    print(score)
+    print()
+    score = round(score)
+    score = eval_dict[score]
+    print(score)
+    print()
+    
+    print(score + '*' + next_move)
+    return score + '*' + next_move
 
 
 #if __name__ == '__main__':
