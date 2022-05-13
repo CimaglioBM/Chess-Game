@@ -23,7 +23,7 @@ def isMate(fen):
         return "False"
 
 def getComputerOpinion(fen, color, depth, moveNum):
-    return "++" + '[' + uciToAn1(fen, getComputerMove(fen, color, depth)) + ',' + str(moveNum)
+    return getComputerMove(fen, color, depth) + ',' + str(moveNum)
 
 
 def getNewFenSan(fen, san):

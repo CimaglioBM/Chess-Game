@@ -481,28 +481,28 @@ function createDescription(x, y, width, height){
                     console.log(xhr.responseText);
                     for(pop = 0; pop < xhr.responseText.length; pop++){
                         if(xhr.responseText.charAt(pop) === ','){
-                            mn = Number(xhr.responseText.charAt(pop + 1));
+                            mmmn = Number(xhr.responseText.charAt(pop + 1));
                             break;
                         }
                     }
-                    if((mn + 1) % 2 == 0){
+                    if((mmmn + 1) % 2 == 0){
                         pop = 0;
                         while(!(xhr.responseText.charAt(pop) === '[')){
-                            desc.whiteEvals[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                            desc.whiteEvals[Math.floor((mmmn + 1) / 2)] += xhr.responseText.charAt(pop++);
                         }
                         pop++;
                         while(!(xhr.responseText.charAt(pop) === ',')){
-                            desc.whiteMoveRec[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                            desc.whiteMoveRec[Math.floor((mmmn + 1) / 2)] += xhr.responseText.charAt(pop++);
                         }
                         
                     }else{
                         pop = 0;
                         while(!(xhr.responseText.charAt(pop) === '[')){
-                            desc.blackEvals[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                            desc.blackEvals[Math.floor((mmmn + 1) / 2)] += xhr.responseText.charAt(pop++);
                         }
                         pop++
                         while(!(xhr.responseText.charAt(pop) === ',')){
-                            desc.blackMoveRec[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                            desc.blackMoveRec[Math.floor((mmmn + 1) / 2)] += xhr.responseText.charAt(pop++);
                         }
                         //desc.blackMoveRec[Math.floor(mn / 2)] = $.ajax({type: "GET", url: '/uciToAn1?fen='+aFen+'&san='+(desc.whiteMoveRec[Math.floor(mn / 2)]), async: false}).responseText;
                     }
