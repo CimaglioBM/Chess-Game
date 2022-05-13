@@ -119,8 +119,15 @@ function createBoard(){
                     ctx.textAlign = "left";
                     ctx.font="Bold 13px arial";
                     ctx.fillStyle = "green";
-                    m = "";
-                    switch(j){
+                    
+                    ctx.fillText(8 - j,65 + 7 * spaceSize,12 + j * spaceSize);
+                }
+            }
+            ctx.textAlign = "left";
+            ctx.font="Bold 13px arial";
+            ctx.fillStyle = "green";
+            m = "";
+                    switch(i){
                         case 0:
                             m = "A";
                             break;
@@ -146,14 +153,7 @@ function createBoard(){
                             m = "H";
                             break;
                     }
-                    ctx.fillText(m,65 + 7 * spaceSize,12 + j * spaceSize);
-                }
-            }
-            ctx.textAlign = "left";
-            ctx.font="Bold 13px arial";
-            ctx.fillStyle = "green";
-
-            ctx.fillText(i+1, i*spaceSize + 3,12);
+            ctx.fillText(m, i*spaceSize + 3,12);
         }
     }
 }
@@ -527,7 +527,7 @@ function createDescription(x, y, width, height){
         }
         aFen = $.ajax({type: "GET", url: '/getFenMoveStr?movestr='+mmstr, async: false}).responseText;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", '/computerOpinion?fen='+aFen+'&color='+ (p % 2) + '&depth=2&moveNum=' + mn, true);
+        xhr.open("GET", '/computerOpinion?fen='+aFen+'&color='+ (p % 2) + '&depth=0&moveNum=' + mn, true);
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
