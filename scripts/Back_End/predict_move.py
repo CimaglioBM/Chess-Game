@@ -126,7 +126,7 @@ def get_predicted_move(board, depth, white):
     #updateBoardFile(path, next_move)
     
     print("done!")
-    return str(score) + '[' + next_move
+    return str(score) + '*' + next_move
 
 
 #if __name__ == '__main__':

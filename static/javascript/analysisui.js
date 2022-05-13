@@ -487,17 +487,34 @@ function createDescription(x, y, width, height){
                     }
                     if((mmmn + 1) % 2 == 0){
                         pop = 0;
-                        while(!(xhr.responseText.charAt(pop) === '[')){
+                        while(!(xhr.responseText.charAt(pop) === '*')){
+                            if(xhr.responseText.charAt(pop) === '['){
+                                pop++;
+                                continue;
+                            }
+                            if(xhr.responseText.charAt(pop) === ']'){
+                                pop++;
+                                continue;
+                            }
                             desc.whiteEvals[Math.floor((mmmn + 1) / 2)] += xhr.responseText.charAt(pop++);
                         }
                         pop++;
                         while(!(xhr.responseText.charAt(pop) === ',')){
+                            
                             desc.whiteMoveRec[Math.floor((mmmn + 1) / 2)] += xhr.responseText.charAt(pop++);
                         }
                         
                     }else{
                         pop = 0;
-                        while(!(xhr.responseText.charAt(pop) === '[')){
+                        while(!(xhr.responseText.charAt(pop) === '*')){
+                            if(xhr.responseText.charAt(pop) === '['){
+                                pop++;
+                                continue;
+                            }
+                            if(xhr.responseText.charAt(pop) === ']'){
+                                pop++;
+                                continue;
+                            }
                             desc.blackEvals[Math.floor((mmmn + 1) / 2)] += xhr.responseText.charAt(pop++);
                         }
                         pop++
