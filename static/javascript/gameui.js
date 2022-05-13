@@ -83,8 +83,9 @@ function makeMove(x, y){
 
 
 
-function startUI(color = 0, time = 10 * 60, difficulty=0, increment = 5){
+function startUI(color = 0, time = 10 * 60, d=0, increment = 5){
     //difficulty = difficulty;
+    difficulty = d;
     chosenColor = color;
     gameCanvas.start();
     board=new createBoard();
@@ -586,7 +587,7 @@ function updateCanvas(){
                 }
                 computerMove = "";
                 var xhr = new XMLHttpRequest();
-
+                console.log(difficulty);
                 xhr.open("GET", '/computerMove?fen='+fen+'&color='+Math.abs(1 - playerColor) + '&depth=' + String(difficulty), true);
                 xhr.onload = function (e) {
                     if (xhr.readyState === 4) {
