@@ -19,6 +19,20 @@ header, .navbar {
     background-color: transparent;
 }
 
+#turn{
+    display: inline-block;
+    color: white;
+    background-color: #282828;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 2px solid darkkhaki;
+    width: 120px;
+    height: 60px;
+    margin: 5px;
+    border-radius: 14px;
+    text-align: center;
+}
+
 a{
     color: white;
     text-decoration: none;
