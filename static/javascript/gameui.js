@@ -572,8 +572,10 @@ function updateCanvas(){
                 ctx.fillStyle = 'lawngreen';
                 ctx.strokeRect(selected.realX, selected.realY, spaceSize, spaceSize);
             }
+            document.getElementById("turn").innerHTML = "Thinking...";
             if(playerColor == chosenColor){
                 timer.decrement(20 / 1000);
+                document.getElementById("turn").innerHTML = "Your move.";
             }else if(computerMove == null){
                 if($.ajax({type: "GET", url: '/isMate?fen='+fen, async: false}).responseText === "True"){
                     gameState = 1;
@@ -583,20 +585,39 @@ function updateCanvas(){
                     break;
                 }
                 computerMove = "";
+                var xhr = new XMLHttpRequest();
+
+                xhr.open("GET", '/computerMove?fen='+fen+'&color='+Math.abs(1 - playerColor) + '&depth=' + String(difficulty), true);
+                xhr.onload = function (e) {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            computerMove = xhr.responseText;
+                            console.log(xhr.responseText);
+                            nufen = $.ajax({type: "GET", url: '/getNewFenUci?fen='+fen+'&uci='+computerMove, async: false}).responseText;
+                            computerMove = $.ajax({type: "GET", url: '/uciToAn1?fen='+fen+'&san='+computerMove, async: false}).responseText;
+                            fen = nufen;
+                            notation.addMove(computerMove, Math.abs(1-playerColor));
+                            
+                            //console.log(fen);
+                            pieces.setPieces(fen);
+                            computerMove = null;
+                            
+                            playerColor = Math.abs(1 - playerColor);
+                            if($.ajax({type: "GET", url: '/isMate?fen='+fen, async: false}).responseText === "True"){
+                                gameState = 1;
+                            }
+                        } else {
+                            console.error(xhr.statusText);
+                        }
+                    }
+                };
+                xhr.onerror = function (e) {
+                    console.error(xhr.statusText);
+                };
+                xhr.send(null);
             }else{
-                computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&color='+Math.abs(1 - playerColor) + '&depth=' + String(difficulty), async: false}).responseText;
-                computerMove = $.ajax({type: "GET", url: '/uciToAn1?fen='+fen+'&san='+computerMove, async: false}).responseText;
-                notation.addMove(computerMove, Math.abs(1-playerColor));
-                fen = $.ajax({type: "GET", url: '/getNewFenSan?fen='+fen+'&san='+computerMove, async: false}).responseText;
-                //console.log(fen);
-                pieces.setPieces(fen);
-                computerMove = null;
+                //computerMove = $.ajax({type: "GET", url: '/computerMove?fen='+fen+'&color='+Math.abs(1 - playerColor) + '&depth=' + String(difficulty), async: false}).responseText;
                 
-                playerColor = Math.abs(1 - playerColor);
-                if($.ajax({type: "GET", url: '/isMate?fen='+fen, async: false}).responseText === "True"){
-                    gameState = 1;
-                    break;
-                }
             }
             
             break;
