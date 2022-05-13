@@ -87,8 +87,8 @@ def get_initial_layer_move(board, model, simple=1):
         scores = np.asarray(scores)
         if len(moves) > 5:
             scores_indexes = scores.argsort()
-            #scores = arr1[arr1inds[0:5]]
-            moves = arr2[arr1inds[0:5]]
+            #scores = scores[scores_indexes[0:5]]
+            moves = moves[scores_indexes[0:5]]
 
         return moves
 
