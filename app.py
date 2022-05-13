@@ -63,13 +63,15 @@ def home():
 def make():
     if request.method == "POST":
         directory = request.form['account']
-        par = request.form['path']
-        path = os.path.join(par, directory)
-        if os.path.isdir(path):
-            return render_template('/home.html')
-        else:
+        #path = os.path.join(par, directory)
+        path = "Users/" + directory
+        
+        print(path)
+
+        if not os.path.isdir(path):
             os.mkdir(path)
-            return render_template('/home.html')
+
+        return render_template('/home.html')
     
 @app.route('/starterPage.html')
 def startgame():
