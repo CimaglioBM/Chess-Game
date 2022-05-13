@@ -83,7 +83,7 @@ function makeMove(x, y){
 
 
 
-function startUI(color = 0, time = 10 * 60, d=0, increment = 5){
+function startUI(color = 0, time = 10 * 60, d=0, increment = 0){
     //difficulty = difficulty;
     difficulty = d;
     chosenColor = color;

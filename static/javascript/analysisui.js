@@ -104,11 +104,56 @@ function createBoard(){
         //draw the dark squares
         ctx.fillStyle = '#e28743';
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-        ctx.fillStyle = '#eab676';
+        
         for(let i=0;i<8;i++){
-            for(let j=0;j<8;j++){
-                if((i+j)%2==0){ctx.fillRect(i*spaceSize,j*spaceSize,spaceSize,spaceSize);}
+            
+
+            let j=0;
+            
+            for(j=0;j<8;j++){
+                if((i+j)%2==0){
+                    ctx.fillStyle = '#eab676';
+                    ctx.fillRect(i*spaceSize,j*spaceSize,spaceSize,spaceSize);
+                }
+                if(i == 7){
+                    ctx.textAlign = "left";
+                    ctx.font="Bold 13px arial";
+                    ctx.fillStyle = "green";
+                    m = "";
+                    switch(j){
+                        case 0:
+                            m = "A";
+                            break;
+                        case 1:
+                            m = "B";
+                            break;
+                        case 2:
+                            m = "C";
+                            break;
+                        case 3:
+                            m = "D";
+                            break;
+                        case 4:
+                            m = "E";
+                            break;
+                        case 5:
+                            m = "F";
+                            break;
+                        case 6:
+                            m = "G";
+                            break;
+                        case 7:
+                            m = "H";
+                            break;
+                    }
+                    ctx.fillText(m,65 + 7 * spaceSize,12 + j * spaceSize);
+                }
             }
+            ctx.textAlign = "left";
+            ctx.font="Bold 13px arial";
+            ctx.fillStyle = "green";
+
+            ctx.fillText(i+1, i*spaceSize + 3,12);
         }
     }
 }
@@ -437,7 +482,15 @@ function createDescription(x, y, width, height){
     this.y = y;
     this.width = width;
     this.height = height;
-    this.opening = "Sicilian Defense: Delayed Alapin Variation";
+    mvstr = "";
+    for(i = 0; i < notation.movesBlack.length + notation.movesWhite.length; i++){
+        if(i % 2 == 0){//white
+            mvstr += notation.movesWhite[Math.floor(i / 2)] + ',';
+        }else{
+            mvstr += notation.movesBlack[Math.floor(i / 2)] + ',';
+        }
+    }
+    this.opening = "";
     
     this.eval = 0.5;
     this.whiteEvals=[];
@@ -474,17 +527,25 @@ function createDescription(x, y, width, height){
         }
         aFen = $.ajax({type: "GET", url: '/getFenMoveStr?movestr='+mmstr, async: false}).responseText;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", '/computerOpinion?fen='+aFen+'&color='+ (p % 2) + '&depth=0&moveNum=' + mn, true);
+        xhr.open("GET", '/computerOpinion?fen='+aFen+'&color='+ (p % 2) + '&depth=4&moveNum=' + mn, true);
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
+                    numbd = false;
+                    nStr = "";
                     for(pop = 0; pop < xhr.responseText.length; pop++){
-                        if(xhr.responseText.charAt(pop) === ','){
-                            mmmn = Number(xhr.responseText.charAt(pop + 1));
-                            break;
+                        if(!numbd && xhr.responseText.charAt(pop) === ','){
+                            
+                            numbd = true;
+                            //mmmn = Number(xhr.responseText.charAt(pop + 1));
+                            //break;
+                        }else if(numbd){
+                            nStr += xhr.responseText.charAt(pop);
                         }
                     }
+                    console.log(nStr);
+                    mmmn = Number(nStr);
                     if((mmmn + 1) % 2 == 0){
                         pop = 0;
                         while(!(xhr.responseText.charAt(pop) === '*')){
@@ -571,10 +632,10 @@ function createDescription(x, y, width, height){
         ctx.font="Bold 10px arial";
 
         ctx.fillStyle = '#505050';
-        ctx.strokeText(this.opening.substr(0, 32) + "...", x + 10 + 2, y + 70 + 2);
+        ctx.strokeText(this.opening.substr(0, 32), x + 10 + 2, y + 70 + 2);
 
         ctx.fillStyle = 'white';
-        ctx.fillText(this.opening.substr(0, 32) + "...", x + 10, y + 70);
+        ctx.fillText(this.opening.substr(0, 32), x + 10, y + 70);
 
 
         ctx.font="Bold 20px arial";

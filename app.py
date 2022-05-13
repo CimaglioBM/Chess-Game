@@ -11,6 +11,10 @@ app = Flask(__name__)
 def legalMoves():
     return cH.moveLegal(**request.args)
 
+@app.route('/getOpening')
+def getOpening():
+    return cH.getOpeningMoveStr(**request.args)
+
 @app.route('/getNewFen')
 def newFen():
     return cH.getNewFen(**request.args)

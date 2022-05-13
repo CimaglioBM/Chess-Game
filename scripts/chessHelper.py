@@ -47,6 +47,18 @@ def getFenMoveStr(movestr):
         b.push_san(a)
     return b.fen()
 
+def getOpeningMoveStr(movestr):
+    moveList = movestr.split(",")
+    dbstr = ""
+    move = 1
+    for m in moveList:
+        if(int(move)==move):
+            dbstr += str(move) + "."
+        dbstr += " " + m
+        move += 0.5
+    print(dbstr)
+
+
 def isStalemate(fen):
     b = chess.Board(fen)
     if(b.is_stalemate()):
