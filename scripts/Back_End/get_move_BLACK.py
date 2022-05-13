@@ -113,7 +113,8 @@ def evaluate_some_moves(board, model, simple=1):
             score += pred_eval(model, board_copy)#model.predict(processed_board)
         
         #get the average score across the moves
-        score = score/len(legal_moves)
+        if len(legal_moves) > 0:
+            score = score/len(legal_moves)
         return score
     else:
         score = 0
@@ -124,7 +125,8 @@ def evaluate_some_moves(board, model, simple=1):
             score += evaluate_some_moves(board_copy, model)
         
         #get the average score across the moves
-        score = score/len(legal_moves)
+        if len(legal_moves) > 0:
+            score = score/len(legal_moves)
         return score
 
 
