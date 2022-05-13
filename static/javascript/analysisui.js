@@ -17,12 +17,14 @@ var spaceSize=75;
 var fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 var prevFen = "";
 var playerColor = 0;
+var aFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 var openFile = function(event) {
     var input = event.target;
 
     var reader = new FileReader();
     reader.onload = function(){
+        
         var text = reader.result;
         var node = document.getElementById('output');
         //node.innerText = text;
@@ -35,6 +37,8 @@ var openFile = function(event) {
             playerColor = Math.abs(1 - playerColor);
         }
         //console.log(reader.result.substring(0, 200));
+        desc = new createDescription(600, 0, 200, 80);
+        desc.analize(0);
     };
     reader.readAsText(input.files[0]);
     
@@ -45,7 +49,7 @@ function startUI(){
     gameCanvas.start();
     board=new createBoard();
     pieces=new createPieces();
-    desc = new createDescription(600, 0, 200, 80);
+    
     bg = new createBackground();
     notation = new createNotation(600, 80);
     gameCanvas.canvas.addEventListener('wheel', scrl);
@@ -434,14 +438,114 @@ function createDescription(x, y, width, height){
     this.width = width;
     this.height = height;
     this.opening = "Sicilian Defense: Delayed Alapin Variation";
-    this.moveRec = "Ne7";
+    
     this.eval = 0.5;
+    this.whiteEvals=[];
+    this.blackEvals=[];
+    this.whiteMoveRec=[];
+    this.blackMoveRec=[];
+    for(i = 0; i < notation.movesWhite.length + 1; i++){
+        this.whiteEvals[i]="";
+        this.whiteMoveRec[i]="";
+    }
+    for(i = 0; i < notation.movesBlack.length + 1; i++){
+        this.blackEvals[i]="";
+        this.blackMoveRec[i]="";
+    }
+    
+    
+    p = 0;
+    
+    
+    
+    this.analize = function(mn){
+        if(mn < notation.movesBlack.length + notation.movesWhite.length){
+            mmstr = "";
+            //mmstr = notation.movesWhite[0] + ',';
+            for(po = 0; po < mn; po++){
+                if(po % 2 == 0){//white
+                    mmstr += notation.movesWhite[Math.floor(po / 2)] + ',';
+                }else{
+                    mmstr += notation.movesBlack[Math.floor(po / 2)] + ',';
+                }
+            }
+        }else{
+            return;
+        }
+        aFen = $.ajax({type: "GET", url: '/getFenMoveStr?movestr='+mmstr, async: false}).responseText;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", '/computerOpinion?fen='+aFen+'&color='+ (p % 2) + '&depth=0&moveNum=' + mn, true);
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    for(pop = 0; pop < xhr.responseText.length; pop++){
+                        if(xhr.responseText.charAt(pop) === ','){
+                            mn = Number(xhr.responseText.charAt(pop + 1));
+                            break;
+                        }
+                    }
+                    if((mn + 1) % 2 == 0){
+                        pop = 0;
+                        while(!(xhr.responseText.charAt(pop) === '[')){
+                            desc.whiteEvals[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                        }
+                        pop++;
+                        while(!(xhr.responseText.charAt(pop) === ',')){
+                            desc.whiteMoveRec[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                        }
+                        
+                    }else{
+                        pop = 0;
+                        while(!(xhr.responseText.charAt(pop) === '[')){
+                            desc.blackEvals[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                        }
+                        pop++
+                        while(!(xhr.responseText.charAt(pop) === ',')){
+                            desc.blackMoveRec[Math.floor((mn + 1) / 2)] += xhr.responseText.charAt(pop++);
+                        }
+                        //desc.blackMoveRec[Math.floor(mn / 2)] = $.ajax({type: "GET", url: '/uciToAn1?fen='+aFen+'&san='+(desc.whiteMoveRec[Math.floor(mn / 2)]), async: false}).responseText;
+                    }
+                    desc.analize(mn + 1);
+                } else {
+                    console.error(xhr.statusText);
+                }
+            }
+            };
+            xhr.onerror = function (e) {
+            console.error(xhr.statusText);
+        };
+        xhr.send(null);
+        
+    }
+    
     
     this.draw = function(){
         ctx = gameCanvas.context;
         ctx.fillStyle = lineColor;
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
+        this.moveRec = "";
+        this.eval = "";
+        if(moveSelect > 0){
+            if(moveSelect % 2 == 0){
+                this.moveRec = this.whiteMoveRec[Math.floor(moveSelect / 2)];
+            }else{
+                this.moveRec = this.blackMoveRec[Math.floor(moveSelect / 2)];
+            }
+            if(this.moveRec == ""){
+                this.moveRec = "Wait..";
+            }
+
+            if(moveSelect % 2 == 0){
+                this.eval = this.whiteEvals[Math.floor(moveSelect / 2)];
+            }else{
+                this.eval = this.blackEvals[Math.floor(moveSelect / 2)];
+            }
+            if(this.eval == ""){
+                this.eval = "Wait..";
+            }
+        }
         ctx.fillStyle = 'black';
         ctx.fillRect(this.x + lineWidth, this.y + lineWidth, this.width - lineWidth * 2, this.height - lineWidth * 2);
 

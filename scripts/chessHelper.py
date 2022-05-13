@@ -1,3 +1,4 @@
+from tokenize import String
 import chess
 from scripts.Back_End.predict_move import *
 
@@ -20,6 +21,9 @@ def isMate(fen):
         return "True"
     else:
         return "False"
+
+def getComputerOpinion(fen, color, depth, moveNum):
+    return "++" + '[' + uciToAn1(fen, getComputerMove(fen, color, depth)) + ',' + str(moveNum)
 
 
 def getNewFenSan(fen, san):

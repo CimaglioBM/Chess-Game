@@ -47,6 +47,10 @@ def isStalemate():
 def computerMove():
     return cH.getComputerMove(**request.args)
 
+@app.route('/computerOpinion')
+def computerOp():
+    return cH.getComputerOpinion(**request.args)
+
 @app.route('/')
 def home():
     return render_template('login.html')
