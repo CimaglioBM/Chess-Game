@@ -100,7 +100,7 @@ function startUI(color = 0, time = 10 * 60, difficulty=0, increment = 5){
 function click(event){
     //When you click
     if(gameState == 0){
-        if(playerColor == 0){
+        if(chosenColor == 0){
 
             for(let i = 0; i < pieces.whitePieces.length; i++){
                 if(pieces.whitePieces[i].realX <= event.pageX &&
@@ -112,7 +112,7 @@ function click(event){
                 }
             }
             
-        }else if(playerColor == 1){
+        }else if(chosenColor == 1){
             for(let i = 0; i < pieces.blackPieces.length; i++){
                 if(pieces.blackPieces[i].realX <= event.pageX &&
                     pieces.blackPieces[i].realX + spaceSize > event.pageX &&
@@ -591,8 +591,15 @@ function updateCanvas(){
                 xhr.onload = function (e) {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
-                            computerMove = xhr.responseText;
                             console.log(xhr.responseText);
+                            computerMove = "";
+                            pop = 0;
+                            while(!(xhr.responseText.charAt(pop++) === '*')){}
+                            while(pop < xhr.responseText.length){
+                                
+                                computerMove += xhr.responseText.charAt(pop++);
+                            }
+                            
                             nufen = $.ajax({type: "GET", url: '/getNewFenUci?fen='+fen+'&uci='+computerMove, async: false}).responseText;
                             computerMove = $.ajax({type: "GET", url: '/uciToAn1?fen='+fen+'&san='+computerMove, async: false}).responseText;
                             fen = nufen;
