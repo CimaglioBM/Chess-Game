@@ -79,9 +79,7 @@ def get_initial_layer_move(board, model, simple=1):
         for each in legal_moves:
             board_copy = chess.Board(board.fen())
             board_copy.push(each)
-            
-            processed_board = BoardtoNumeric(board_copy)
-            
+                        
             curr_score = pred_eval(model, board_copy)#model.predict(processed_board)
             
             moves.append(each)
