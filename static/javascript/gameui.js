@@ -18,6 +18,8 @@ var chosenColor = 0;
 var fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 var computerMove = null;
 var difficulty = 0;
+var dir;
+var saved = false;
 //white: playerColor = 0
 //black: playerColor = 1
 var playerColor = 0;
@@ -83,7 +85,8 @@ function makeMove(x, y){
 
 
 
-function startUI(color = 0, time = 10 * 60, d=0, increment = 0){
+function startUI(color = 0, time = 10 * 60, d=0, increment = 0, path){
+    dir = path
     //difficulty = difficulty;
     difficulty = d;
     chosenColor = color;
@@ -630,23 +633,23 @@ function updateCanvas(){
             
             break;
         case 1://Checkmate
-            document.getElementById("result").innerHTML = "CHECKMATE!";
+            document.getElementById("turn").innerHTML = "CHECKMATE!";
             if(playerColor == chosenColor){
-                document.getElementById("result").innerHTML += " YOU WIN!";
+                document.getElementById("turn").innerHTML += " YOU WIN!";
             }else{
-                document.getElementById("result").innerHTML += " YOU LOSE!";
+                document.getElementById("turn").innerHTML += " YOU LOSE!";
             }
             break;
         case 2://Timeout
-            document.getElementById("result").innerHTML = "TIMEOUT!";
+            document.getElementById("turn").innerHTML = "TIMEOUT!";
             if(insufficientMaterial(playerColor)){
-                document.getElementById("result").innerHTML += " DRAW DO TO INSUFFICIENT MATERIAL!";
+                document.getElementById("turn").innerHTML += " DRAW DO TO INSUFFICIENT MATERIAL!";
             }else{
-                document.getElementById("result").innerHTML += " YOU LOSE!";
+                document.getElementById("turn").innerHTML += " YOU LOSE!";
             }
             break;
         case 3://Stalemate
-            document.getElementById("result").innerHTML = "STALEMATE!";
+            document.getElementById("turn").innerHTML = "STALEMATE!";
             break;
     }
     

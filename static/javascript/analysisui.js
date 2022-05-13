@@ -527,7 +527,7 @@ function createDescription(x, y, width, height){
         }
         aFen = $.ajax({type: "GET", url: '/getFenMoveStr?movestr='+mmstr, async: false}).responseText;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", '/computerOpinion?fen='+aFen+'&color='+ (p % 2) + '&depth=4&moveNum=' + mn, true);
+        xhr.open("GET", '/computerOpinion?fen='+aFen+'&color='+ (p % 2) + '&depth=2&moveNum=' + mn, true);
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
